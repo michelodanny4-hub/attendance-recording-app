@@ -110,7 +110,9 @@ function renderStudents() {
 }
  // Student attendance history
 document.querySelector('[data-page="history"]')
-  ?.addEventListener('click', showHistory); {
+  ?.addEventListener('click', showHistory);
+
+function showHistory() {
   if ($('historyStudent')) return;
 
   $('reportContent').insertAdjacentHTML('beforebegin', `
