@@ -111,7 +111,6 @@ function renderStudents() {
  //Student attendance history
 document.querySelector('[data-page="reports"]')
   ?.addEventListener('click', showHistory);
-
 function showHistory() {
   if ($('historyStudent')) return;
 
@@ -144,36 +143,37 @@ function showHistory() {
     if (error) return alert(error.message);
 
     const present = data.filter(r => r.status === 'Present').length;
-const late = data.filter(r => r.status === 'Late').length;
-const absent = data.filter(r => r.status === 'Absent').length;
-const excused = data.filter(r => r.status === 'Excused').length;
+    const late = data.filter(r => r.status === 'Late').length;
+    const absent = data.filter(r => r.status === 'Absent').length;
+    const excused = data.filter(r => r.status === 'Excused').length;
 
-const rate = data.length
-  ? Math.round((present + late) / data.length * 100)
-  : 0;
+    const rate = data.length
+      ? Math.round((present + late) / data.length * 100)
+      : 0;
 
-$('historyResults').innerHTML = data.length
-  ? `
-    <h3>Attendance Statistics</h3>
-    <p><b>Attendance rate:</b> ${rate}%</p>
-    <p><b>Total records:</b> ${data.length}</p>
-    <p>Present: ${present}</p>
-    <p>Absent: ${absent}</p>
-    <p>Late: ${late}</p>
-    <p>Excused: ${excused}</p>
+    $('historyResults').innerHTML = data.length
+      ? `
+        <h3>Attendance Statistics</h3>
+        <p><b>Attendance rate:</b> ${rate}%</p>
+        <p><b>Total records:</b> ${data.length}</p>
+        <p>Present: ${present}</p>
+        <p>Absent: ${absent}</p>
+        <p>Late: ${late}</p>
+        <p>Excused: ${excused}</p>
+        <h4>Attendance History</h4>
+        <table>
+          <tr><th>Date</th><th>Status</th></tr>
+          ${data.map(r => `
+            <tr>
+              <td>${esc(r.attendance_date)}</td>
+              <td>${esc(r.status)}</td>
+            </tr>
+          `).join('')}
+        </table>
+      `
+      : 'No attendance history found.';
+  };
+}
 
-    <h4>Attendance History</h4>
-    <table>
-      <tr><th>Date</th><th>Status</th></tr>
-      ${data.map(r => `
-        <tr>
-          <td>${esc(r.attendance_date)}</td>
-          <td>${esc(r.status)}</td>
-        </tr>
-      `).join('')}
-    </table>
-  `
-  : 'No attendance history found.';
-});
   
 if(configured)startApp();
