@@ -227,23 +227,92 @@ function showHistory() {
       : 'No attendance history found.';
   };
 }
-// School Settings
+
+// School Information Settings
 const settingsForm = $('settingsForm');
+const savedSchoolInfo = $('savedSchoolInfo');
+const editSchoolInfo = $('editSchoolInfo');
+
+function displaySchoolInfo() {
+  const name = localStorage.getItem('schoolName') || '';
+  const address = localStorage.getItem('schoolAddress') || '';
+  const contact = localStorage.getItem('schoolContact') || '';
+
+  if (name) {
+    savedSchoolInfo.innerHTML = `
+      <div class="panel">
+        <h3>${esc(name)}</h3>
+        <p>${esc(address)}</p>
+        <p>Contact: ${esc(contact)}</p>
+      </div>
+    `;
+
+    savedSchoolInfo.hidden = false;
+    settingsForm.hidden = true;
+    editSchoolInfo.hidden = false;
+  } else {
+    savedSchoolInfo.hidden = true;
+    settingsForm.hidden = false;
+    editSchoolInfo.hidden = true;
+  }
+}
 
 if (settingsForm) {
-  $('schoolName').value = localStorage.getItem('schoolName') || '';
-  $('schoolAddress').value = localStorage.getItem('schoolAddress') || '';
-  $('schoolContact').value = localStorage.getItem('schoolContact') || '';
+  displaySchoolInfo();
 
   settingsForm.onsubmit = function(e) {
     e.preventDefault();
 
-    localStorage.setItem('schoolName', $('schoolName').value);
-    localStorage.setItem('schoolAddress', $('schoolAddress').value);
-    localStorage.setItem('schoolContact', $('schoolContact').value);
+    localStorage.setItem('schoolName', $('schoolName').value.trim());
+    localStorage.setItem('schoolAddress', $('schoolAddress').value.trim());
+    localStorage.setItem('schoolContact', $('schoolContact').value.trim());
 
-    $('settingsMsg').textContent = 'Settings saved successfully!';
+    settingsForm.reset();
+
+    $('settingsMsg').textContent =
+      'School information saved successfully!';
+
+    displaySchoolInfo();
+  };
+
+  editSchoolInfo.onclick = function() {
+    $('schoolName').value = localStorage.getItem('schoolName') || '';
+    $('schoolAddress').value = localStorage.getItem('schoolAddress') || '';
+    $('schoolContact').value = localStorage.getItem('schoolContact') || '';
+
+    settingsForm.hidden = false;
+    savedSchoolInfo.hidden = true;
+    editSchoolInfo.hidden = true;
+    $('settingsMsg').textContent = '';
   };
 }
-  
+
+// Application Settings
+const appSettingsForm = $('appSettingsForm');
+
+if (appSettingsForm) {
+  $('academicYear').value =
+    localStorage.getItem('academicYear') || '2026';
+
+  $('attendanceSession').value =
+    localStorage.getItem('attendanceSession') || 'Morning';
+
+  $('defaultAttendance').value =
+    localStorage.getItem('defaultAttendance') || 'Present';
+
+  $('dateFormat').value =
+    localStorage.getItem('dateFormat') || 'YYYY-MM-DD';
+
+  appSettingsForm.onsubmit = function(e) {
+    e.preventDefault();
+
+    localStorage.setItem('academicYear', $('academicYear').value);
+    localStorage.setItem('attendanceSession', $('attendanceSession').value);
+    localStorage.setItem('defaultAttendance', $('defaultAttendance').value);
+    localStorage.setItem('dateFormat', $('dateFormat').value);
+
+    $('appSettingsMsg').textContent =
+      'Application settings saved successfully!';
+  };
+}  
 if(configured)startApp();
