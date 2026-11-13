@@ -5,7 +5,48 @@
 <body><div id="login" class="login-wrap"><section class="login-card"><div class="logo">AR</div><h1>Attendance Record</h1><p>Sign in to manage attendance online.</p><form id="loginForm"><label>Email</label><input id="email" type="email" required placeholder="admin@example.com"><label>Password</label><input id="password" type="password" required placeholder="Password"><button type="submit">Sign in</button></form><p id="loginMsg" class="msg"></p></section></div>
 <div id="app" hidden><aside class="sidebar"><div class="brand"><span class="logo">AR</span><span>Attendance<br><small>RECORD SYSTEM</small></span></div><nav><button class="nav active" data-page="dashboard">▦ Dashboard</button><button class="nav" data-page="students">♙ Students</button><button class="nav" data-page="record">✓ Record Attendance</button><button class="nav" data-page="reports">▤ Reports</button></nav><button id="logout" class="logout">↪ Sign out</button></aside>
 <main><header><div><p class="eyebrow">ATTENDANCE MANAGEMENT</p><h2 id="pageTitle">Dashboard</h2></div><div class="user">● <span id="userEmail"></span></div></header>
-<section id="dashboard" class="page"><div class="stats"><article><span>Total students</span><strong id="totalStudents">0</strong></article><article><span>Present today</span><strong id="presentToday">0</strong></article><article><span>Absent today</span><strong id="absentToday">0</strong></article><article><span>Attendance rate</span><strong id="rateToday">0%</strong></article></div><article class="panel"><h3>Today’s attendance</h3><p class="muted">Summary for the selected current date.</p><div id="todaySummary" class="empty">No attendance records for today yet.</div></article></section>
+<section id="dashboard" class="page">
+  <div class="stats">
+    <article class="panel stat-card">
+      <span>👨‍🎓 Total Students</span>
+      <strong id="totalStudents">0</strong>
+      <p class="muted">Registered learners</p>
+    </article>
+
+    <article class="panel stat-card">
+      <span>🟢 Present Today</span>
+      <strong id="presentToday">0</strong>
+      <p class="muted">Students present or late</p>
+    </article>
+
+    <article class="panel stat-card">
+      <span>🔴 Absent Today</span>
+      <strong id="absentToday">0</strong>
+      <p class="muted">Students absent</p>
+    </article>
+
+    <article class="panel stat-card">
+      <span>📊 Attendance Rate</span>
+      <strong id="rateToday">0%</strong>
+      <p class="muted">Today's attendance</p>
+    </article>
+  </div>
+
+  <article class="panel">
+    <div class="panel-head">
+      <div>
+        <h3>Today's Attendance Overview</h3>
+        <p class="muted">
+          Summary of attendance records for today.
+        </p>
+      </div>
+    </div>
+
+    <div id="todaySummary" class="empty">
+      No attendance records for today yet.
+    </div>
+  </article>
+</section>
 <section id="students" class="page" hidden><article class="panel"><div class="panel-head"><div><h3>Student directory</h3><p class="muted">Add and manage learners.</p></div><button id="addStudentBtn">+ Add student</button></div><div id="studentFormWrap" hidden><form id="studentForm" class="student-form"><input id="studentName" required placeholder="Full name"><input id="studentCode" required placeholder="Student ID / number"><input id="studentClass" placeholder="Class / grade"><button type="submit">Save student</button><button type="button" id="cancelStudent" class="secondary">Cancel</button></form></div><div class="table-wrap"><table><thead><tr><th>Student ID</th><th>Name</th><th>Class</th><th></th></tr></thead><tbody id="studentsRows"></tbody></table></div></article></section>
 <section id="record" class="page" hidden><article class="panel"><div class="panel-head"><div><h3>Record attendance</h3><p class="muted">Choose a date and mark each student.</p></div><input id="attendanceDate" type="date"></div><div id="attendanceList" class="empty">Add students first to record attendance.</div><button id="saveAttendance" class="save-btn">Save attendance</button><p id="recordMsg" class="msg"></p></article></section>
 <section id="reports" class="page" hidden><article class="panel"><div class="panel-head"><div><h3>Attendance report</h3><p class="muted">View records by date.</p></div><input id="reportDate" type="date"><button id="loadReport">View report</button></div><div id="reportContent" class="empty">Select a date and view the report.</div></article></section>
