@@ -179,6 +179,23 @@ function showHistory() {
       : 'No attendance history found.';
   };
 }
+// School Settings
+const settingsForm = $('settingsForm');
 
+if (settingsForm) {
+  $('schoolName').value = localStorage.getItem('schoolName') || '';
+  $('schoolAddress').value = localStorage.getItem('schoolAddress') || '';
+  $('schoolContact').value = localStorage.getItem('schoolContact') || '';
+
+  settingsForm.onsubmit = function(e) {
+    e.preventDefault();
+
+    localStorage.setItem('schoolName', $('schoolName').value);
+    localStorage.setItem('schoolAddress', $('schoolAddress').value);
+    localStorage.setItem('schoolContact', $('schoolContact').value);
+
+    $('settingsMsg').textContent = 'Settings saved successfully!';
+  };
+}
   
 if(configured)startApp();
