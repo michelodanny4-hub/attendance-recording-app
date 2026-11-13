@@ -174,4 +174,6 @@ $('historyResults').innerHTML = data.length
     </table>
   `
   : 'No attendance history found.';
+});
+  : 'No attendance history found.';
 if(configured)startApp();
