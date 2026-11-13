@@ -108,4 +108,69 @@ function renderStudents() {
     }
   );
 }
+// Student attendance history
+if (!$('historyStudent')) {
+  $('reportContent').insertAdjacentHTML('beforebegin', `
+    <div style="margin:15px 0;padding:15px;border:1px solid #ddd;border-radius:10px;">
+      <h3>Student Attendance History</h3>
+      <select id="historyStudent" style="width:100%;padding:10px;margin-bottom:10px;">
+        <option value="">Select a student</option>
+      </select>
+      <button id="loadHistory">View History</button>
+      <div id="historyResults" style="margin-top:15px;"></div>
+    </div>
+  `);
+
+  $('historyStudent').addEventListener('focus', () => {
+    $('historyStudent').innerHTML =
+      '<option value="">Select a student</option>' +
+      students.map(s =>
+        `<option value="${s.id}">${esc(s.full_name)} (${esc(s.student_code)})</option>`
+      ).join('');
+  });
+
+  $('loadHistory').onclick = async () => {
+    const studentId = $('historyStudent').value;
+
+    if (!studentId) {
+      alert('Please select a student.');
+      return;
+    }
+
+    const {data, error} = await client
+      .from('attendance')
+      .select('attendance_date,status')
+      .eq('student_id', studentId)
+      .order('attendance_date', {ascending: false});
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    if (!data.length) {
+      $('historyResults').innerHTML = 'No attendance history found.';
+      return;
+    }
+
+    $('historyResults').innerHTML = `
+      <h4>Total records: ${data.length}</h4>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Status</th></tr>
+          </thead>
+          <tbody>
+            ${data.map(r => `
+              <tr>
+                <td>${esc(r.attendance_date)}</td>
+                <td>${esc(r.status)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+      </div>
+    `;
+  };
+}
 if(configured)startApp();
