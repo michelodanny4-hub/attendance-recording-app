@@ -24,7 +24,55 @@ async function renderAttendance(){const records=await getDayRecords($('attendanc
 $('attendanceDate').onchange=renderAttendance;
 $('saveAttendance').onclick=async()=>{if(!students.length)return notice('recordMsg','Please add students first.');const date=$('attendanceDate').value;if(!date)return notice('recordMsg','Choose a date.');const rows=[...document.querySelectorAll('[data-student]')].map(sel=>({student_id:sel.dataset.student,attendance_date:date,status:sel.value}));const {error}=await client.from('attendance').upsert(rows,{onConflict:'student_id,attendance_date'});notice('recordMsg',error?error.message:'Attendance saved successfully.');if(!error)await loadDashboard()};
 async function loadDashboard(){const {count,error}=await client.from('students').select('*',{count:'exact',head:true});if(error)return;const records=await getDayRecords(today());const present=records.filter(r=>r.status==='Present'||r.status==='Late').length;const absent=records.filter(r=>r.status==='Absent').length;$('totalStudents').textContent=count||0;$('presentToday').textContent=present;$('absentToday').textContent=absent;$('rateToday').textContent=records.length?Math.round(present/records.length*100)+'%':'0%';$('todaySummary').innerHTML=records.length?`<p><b>${records.length}</b> records · ${present} present/late · ${absent} absent · ${records.filter(r=>r.status==='Excused').length} excused</p>`:'No attendance records for today yet.'}
-$('loadReport').onclick=async()=>{const records=await getDayRecords($('reportDate').value);$('reportContent').innerHTML=records.length?`<div class="table-wrap"><table><thead><tr><th>Student ID</th><th>Name</th><th>Class</th><th>Status</th></tr></thead><tbody>${records.map(r=>`<tr><td>${esc(r.students?.student_code||'')}</td><td>${esc(r.students?.full_name||'')}</td><td>${esc(r.students?.class_name||'—')}</td><td>${esc(r.status)}</td></tr>`).join('')}</tbody></table><p><b>${records.length} attendance records</b></p></div>`:'<div class="empty">No records for this date.</div>'};
+
+$('loadReport').onclick = async () => {
+  const records = await getDayRecords($('reportDate').value);
+
+  const schoolName = localStorage.getItem('schoolName') || 'School Name';
+  const schoolAddress = localStorage.getItem('schoolAddress') || '';
+  const schoolContact = localStorage.getItem('schoolContact') || '';
+
+  $('reportContent').innerHTML = records.length
+    ? `
+      <div class="table-wrap">
+
+        <div style="text-align:center;margin-bottom:20px;">
+          <h2>${esc(schoolName)}</h2>
+          <p>${esc(schoolAddress)}</p>
+          <p>Contact: ${esc(schoolContact)}</p>
+          <h3>ATTENDANCE REPORT</h3>
+          <p>Date: ${esc($('reportDate').value)}</p>
+          <hr>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Student ID</th>
+              <th>Name</th>
+              <th>Class</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${records.map(r => `
+              <tr>
+                <td>${esc(r.students?.student_code || '')}</td>
+                <td>${esc(r.students?.full_name || '')}</td>
+                <td>${esc(r.students?.class_name || '—')}</td>
+                <td>${esc(r.status)}</td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+
+        <p><b>${records.length} attendance records</b></p>
+      </div>
+    `
+    : '<div class="empty">No records for this date.</div>';
+};
+
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 // Export attendance report to CSV
 $('loadReport').insertAdjacentHTML(
