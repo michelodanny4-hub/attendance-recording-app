@@ -26,4 +26,46 @@ $('saveAttendance').onclick=async()=>{if(!students.length)return notice('recordM
 async function loadDashboard(){const {count,error}=await client.from('students').select('*',{count:'exact',head:true});if(error)return;const records=await getDayRecords(today());const present=records.filter(r=>r.status==='Present'||r.status==='Late').length;const absent=records.filter(r=>r.status==='Absent').length;$('totalStudents').textContent=count||0;$('presentToday').textContent=present;$('absentToday').textContent=absent;$('rateToday').textContent=records.length?Math.round(present/records.length*100)+'%':'0%';$('todaySummary').innerHTML=records.length?`<p><b>${records.length}</b> records · ${present} present/late · ${absent} absent · ${records.filter(r=>r.status==='Excused').length} excused</p>`:'No attendance records for today yet.'}
 $('loadReport').onclick=async()=>{const records=await getDayRecords($('reportDate').value);$('reportContent').innerHTML=records.length?`<div class="table-wrap"><table><thead><tr><th>Student ID</th><th>Name</th><th>Class</th><th>Status</th></tr></thead><tbody>${records.map(r=>`<tr><td>${esc(r.students?.student_code||'')}</td><td>${esc(r.students?.full_name||'')}</td><td>${esc(r.students?.class_name||'—')}</td><td>${esc(r.status)}</td></tr>`).join('')}</tbody></table><p><b>${records.length} attendance records</b></p></div>`:'<div class="empty">No records for this date.</div>'};
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+// Export attendance report to CSV
+$('loadReport').insertAdjacentHTML(
+  'afterend',
+  '<button id="exportReport">Export Report to Excel</button>'
+);
+
+$('exportReport').onclick = async () => {
+  const date = $('reportDate').value;
+  const records = await getDayRecords(date);
+
+  if (!records.length) {
+    alert('No attendance records to export.');
+    return;
+  }
+
+  const csv = [
+    ['Student ID', 'Name', 'Class', 'Status'],
+    ...records.map(r => [
+      r.students?.student_code || '',
+      r.students?.full_name || '',
+      r.students?.class_name || '',
+      r.status
+    ])
+  ].map(row =>
+    row.map(value =>
+      '"' + String(value).replace(/"/g, '""') + '"'
+    ).join(',')
+  ).join('\n');
+
+  const blob = new Blob([csv], {
+    type: 'text/csv;charset=utf-8;'
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+
+  link.href = url;
+  link.download = 'attendance-report-' + date + '.csv';
+  link.click();
+
+  URL.revokeObjectURL(url);
+};
 if(configured)startApp();
