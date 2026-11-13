@@ -1,3 +1,106 @@
 [hidden] {
     display: none !important;
 }*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f4f6fb;color:#182230}.login-wrap{min-height:100vh;display:grid;place-items:center;padding:20px}.login-card{background:white;padding:34px;border-radius:18px;width:min(420px,100%);box-shadow:0 12px 40px #17255412}.logo{display:inline-grid;place-items:center;background:#4f46e5;color:white;width:42px;height:42px;border-radius:12px;font-weight:800}.login-card h1{margin:18px 0 6px}.login-card p,.muted{color:#778197;font-size:14px}.login-card label{display:block;margin:16px 0 7px;font-size:13px;font-weight:600}input{padding:11px 12px;border:1px solid #dce1eb;border-radius:9px;background:#fff;font:inherit;min-width:0}form input{width:100%}button{border:0;border-radius:9px;background:#4f46e5;color:white;padding:11px 15px;font-weight:650;cursor:pointer}button:hover{filter:brightness(.95)}#loginForm button{width:100%;margin-top:20px}.sidebar{position:fixed;inset:0 auto 0 0;width:240px;background:#111827;color:white;padding:24px 16px;display:flex;flex-direction:column}.brand{display:flex;align-items:center;gap:12px;font-weight:700;margin:0 8px 35px}.brand small{font-size:9px;letter-spacing:1.5px;color:#9ca3af}.nav{display:block;width:100%;text-align:left;background:transparent;color:#cbd5e1;margin:5px 0;padding:13px}.nav.active,.nav:hover{background:#3730a3;color:white}.logout{margin-top:auto;background:#273244;text-align:left}main{margin-left:240px;padding:30px;max-width:1500px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}header h2{margin:5px 0;font-size:28px}.eyebrow{font-size:10px;letter-spacing:1.8px;color:#8189a0;font-weight:700;margin:0}.user{font-size:13px;color:#667085}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;margin-bottom:22px}.stats article,.panel{background:white;border:1px solid #e8ebf2;border-radius:15px;padding:22px;box-shadow:0 3px 12px #11182705}.stats span{display:block;color:#788197;font-size:13px}.stats strong{display:block;font-size:32px;margin-top:12px}.panel h3{margin:0 0 8px}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:18px}.panel-head .muted{margin:4px 0}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;margin-top:15px}th,td{text-align:left;padding:13px;border-bottom:1px solid #edf0f5;font-size:14px}th{color:#7b8497;font-size:12px}.empty{padding:22px;color:#8a93a5;text-align:center}.student-form{display:grid;grid-template-columns:2fr 1fr 1fr auto auto;gap:9px;margin:16px 0}.secondary{background:#e9ebf4;color:#343b4d}.save-btn{margin-top:18px}.attendance-row{display:flex;align-items:center;justify-content:space-between;padding:12px;border-bottom:1px solid #edf0f5;gap:10px}.attendance-row .student{font-weight:600}.attendance-row small{display:block;color:#8a93a5;margin-top:3px}.status-select{max-width:150px}.msg{font-size:13px;color:#4f46e5}.danger{background:#fee2e2;color:#b91c1c;padding:7px 10px}@media(max-width:850px){.sidebar{width:68px;padding:16px 8px}.brand span:not(.logo){display:none}.nav{font-size:0;text-align:center;padding:14px 5px}.nav:first-letter{font-size:18px}.logout{font-size:0;text-align:center}.logout:first-letter{font-size:18px}main{margin-left:68px;padding:18px}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.student-form{grid-template-columns:1fr 1fr}.panel-head{flex-wrap:wrap}}
+
+/* Modern Attendance Dashboard */
+body {
+  background: #f1f5f9;
+  color: #1e293b;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.app {
+  max-width: 1400px;
+  margin: auto;
+}
+
+header {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.card,
+.stat-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 11px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+button:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+input,
+select {
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 11px;
+  background: white;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+th {
+  background: #eff6ff;
+  color: #1e40af;
+  text-align: left;
+  padding: 14px;
+}
+
+td {
+  padding: 13px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+tr:hover {
+  background: #f8fafc;
+}
+
+.nav {
+  border-radius: 10px;
+  margin: 4px;
+}
+
+.nav.active {
+  background: #2563eb;
+  color: white;
+}
+
+@media (max-width: 768px) {
+  .app {
+    padding: 10px;
+  }
+
+  table {
+    font-size: 13px;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+
+  button {
+    max-width: 100%;
+  }
+}
