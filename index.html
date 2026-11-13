@@ -71,23 +71,69 @@
 
   <section id="settings" class="page" hidden>
   <article class="panel">
-    <h3>System Settings</h3>
-    <p class="muted">Manage your school information.</p>
+    <h2>⚙ System Settings</h2>
+    <p class="muted">Configure your school's information and application preferences.</p>
+
+    <hr>
+
+    <h3>🏫 School Information</h3>
+
+    <div id="savedSchoolInfo" hidden></div>
+
+    <button type="button" id="editSchoolInfo" hidden>
+      Edit School Information
+    </button>
 
     <form id="settingsForm">
       <label>School Name</label>
       <input id="schoolName" type="text" placeholder="Enter school name" required>
 
       <label>School Address</label>
-      <input id="schoolAddress" type="text" placeholder="Enter school address">
+      <input id="schoolAddress" type="text" placeholder="Enter school address" required>
 
       <label>Contact Number</label>
-      <input id="schoolContact" type="tel" placeholder="Enter contact number">
+      <input id="schoolContact" type="tel" placeholder="Enter contact number" required>
 
-      <button type="submit">Save Settings</button>
+      <button type="submit">Save School Information</button>
     </form>
 
     <p id="settingsMsg" class="msg"></p>
+
+    <hr>
+
+    <h3>🛠 Application Settings</h3>
+
+    <form id="appSettingsForm">
+
+      <label>Academic Year</label>
+      <input id="academicYear" type="text" placeholder="e.g. 2026" required>
+
+      <label>Attendance Session</label>
+      <select id="attendanceSession">
+        <option value="Morning">Morning</option>
+        <option value="Afternoon">Afternoon</option>
+        <option value="Full Day">Full Day</option>
+      </select>
+
+      <label>Default Attendance Status</label>
+      <select id="defaultAttendance">
+        <option value="Present">Present</option>
+        <option value="Absent">Absent</option>
+        <option value="Late">Late</option>
+        <option value="Excused">Excused</option>
+      </select>
+
+      <label>Date Format</label>
+      <select id="dateFormat">
+        <option value="YYYY-MM-DD">YYYY-MM-DD</option>
+        <option value="DD/MM/YYYY">DD/MM/YYYY</option>
+        <option value="MM/DD/YYYY">MM/DD/YYYY</option>
+      </select>
+
+      <button type="submit">Save Application Settings</button>
+    </form>
+
+    <p id="appSettingsMsg" class="msg"></p>
   </article>
 </section>
 </main></div><script src="app.js"></script></body></html>
