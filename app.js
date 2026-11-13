@@ -175,5 +175,5 @@ $('historyResults').innerHTML = data.length
   `
   : 'No attendance history found.';
 });
-  : 'No attendance history found.';
+  
 if(configured)startApp();
