@@ -108,16 +108,14 @@ function renderStudents() {
     }
   );
 }
- // Student attendance history
+// Student attendance history
 document.querySelector('[data-page="history"]')
   ?.addEventListener('click', showHistory);
 
 function showHistory() {
-  if ($('historyStudent')) return;
-
-  $('reportContent').insertAdjacentHTML('beforebegin', `
+  $('historyContent').innerHTML = `
     <div style="margin:15px 0;padding:15px;border:1px solid #ddd;border-radius:10px;">
-      <h3>Student Attendance History</h3>
+      <label>Select Student</label>
       <select id="historyStudent" style="width:100%;padding:10px;">
         <option value="">Select a student</option>
         ${students.map(s => `
@@ -126,13 +124,18 @@ function showHistory() {
           </option>
         `).join('')}
       </select>
-      <button id="loadHistory" style="margin-top:10px;">View History</button>
+
+      <button id="loadHistory" style="margin-top:10px;">
+        View History
+      </button>
+
       <div id="historyResults" style="margin-top:15px;"></div>
     </div>
-  `);
+  `;
 
   $('loadHistory').onclick = async () => {
     const id = $('historyStudent').value;
+
     if (!id) return alert('Please select a student.');
 
     const {data, error} = await client
@@ -161,6 +164,7 @@ function showHistory() {
         <p>Absent: ${absent}</p>
         <p>Late: ${late}</p>
         <p>Excused: ${excused}</p>
+
         <h4>Attendance History</h4>
         <table>
           <tr><th>Date</th><th>Status</th></tr>
