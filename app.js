@@ -108,10 +108,9 @@ function renderStudents() {
     }
   );
 }
- //Student attendance history
-document.querySelector('[data-page="reports"]')
-  ?.addEventListener('click', showHistory);
-function showHistory() {
+ // Student attendance history
+document.querySelector('[data-page="history"]')
+  ?.addEventListener('click', showHistory); {
   if ($('historyStudent')) return;
 
   $('reportContent').insertAdjacentHTML('beforebegin', `
