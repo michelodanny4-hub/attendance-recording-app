@@ -58,7 +58,24 @@
 </section>
 <section id="students" class="page" hidden><article class="panel"><div class="panel-head"><div><h3>Student directory</h3><p class="muted">Add and manage learners.</p></div><button id="addStudentBtn">+ Add student</button></div><div id="studentFormWrap" hidden><form id="studentForm" class="student-form"><input id="studentName" required placeholder="Full name"><input id="studentCode" required placeholder="Student ID / number"><input id="studentClass" placeholder="Class / grade"><button type="submit">Save student</button><button type="button" id="cancelStudent" class="secondary">Cancel</button></form></div><div class="table-wrap"><table><thead><tr><th>Student ID</th><th>Name</th><th>Class</th><th></th></tr></thead><tbody id="studentsRows"></tbody></table></div></article></section>
 <section id="record" class="page" hidden><article class="panel"><div class="panel-head"><div><h3>Record attendance</h3><p class="muted">Choose a date and mark each student.</p></div><input id="attendanceDate" type="date"></div><div id="attendanceList" class="empty">Add students first to record attendance.</div><button id="saveAttendance" class="save-btn">Save attendance</button><p id="recordMsg" class="msg"></p></article></section>
-<section id="reports" class="page" hidden><article class="panel"><div class="panel-head"><div><h3>Attendance report</h3><p class="muted">View records by date.</p></div><input id="reportDate" type="date"><button id="loadReport">View report</button></div><div id="reportContent" class="empty">Select a date and view the report.</div></article></section>
+<section id="reports" class="page" hidden>
+  <article class="panel">
+    <div class="panel-head">
+      <div>
+        <h3>Attendance report</h3>
+        <p class="muted">View records by date.</p>
+      </div>
+
+      <input id="reportDate" type="date">
+      <button id="loadReport">View report</button>
+      <button id="printReport">🖨 Print Report</button>
+    </div>
+
+    <div id="reportContent" class="empty">
+      Select a date and view the report.
+    </div>
+  </article>
+</section>
 <section id="history" class="page" hidden>
   <article class="panel">
     <h3>Student Attendance History</h3>
