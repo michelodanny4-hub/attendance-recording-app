@@ -316,13 +316,9 @@ if (appSettingsForm) {
   };
 }  
 
-$('printReport').onclick = () => {
-  const report = $('reportContent').innerHTML;
-
-  if (!report || report.includes('Select a date') || report.includes('No records for this date.')) {
-    alert('Please load an attendance report first.');
-    return;
-  }
+$('printReport').addEventListener('click', function() {
+  window.print();
+});
 
   const win = window.open('', '_blank');
 
