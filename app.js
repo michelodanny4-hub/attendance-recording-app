@@ -315,4 +315,43 @@ if (appSettingsForm) {
       'Application settings saved successfully!';
   };
 }  
+
+$('printReport').onclick = () => {
+  const report = $('reportContent').innerHTML;
+
+  if (!report || report.includes('Select a date') || report.includes('No records for this date.')) {
+    alert('Please load an attendance report first.');
+    return;
+  }
+
+  const win = window.open('', '_blank');
+
+  if (!win) {
+    alert('Please allow pop-ups to print the report.');
+    return;
+  }
+
+  win.document.write(`
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <title>Attendance Report</title>
+      <style>
+        body { font-family: Arial; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ddd; padding: 8px; }
+        th { background: #f1f1f1; }
+      </style>
+    </head>
+    <body>
+      ${report}
+      <script>
+        window.onload = () => window.print();
+      <\/script>
+    </body>
+    </html>
+  `);
+
+  win.document.close();
+};
 if(configured)startApp();
