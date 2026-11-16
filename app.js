@@ -320,10 +320,6 @@ $('printReport').addEventListener('click', function() {
   window.print();
 });
 
-  $('printReport').addEventListener('click', function() {
-  window.print();
-});
-
   win.document.write(`
     <!DOCTYPE html>
     <html>
