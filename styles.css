@@ -149,3 +149,61 @@ tr:hover {
   border-radius: 12px;
   border: 1px solid #e2e8f0;
 }
+
+/* Student Management - Professional Design */
+#students .panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+#students h3 {
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+#students input,
+#students select {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 11px;
+  outline: none;
+}
+
+#students input:focus,
+#students select:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+#students button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+}
+
+#students button:hover {
+  background: #1d4ed8;
+}
+
+#students table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#students th {
+  background: #eff6ff;
+  color: #1e3a8a;
+  padding: 12px;
+  text-align: left;
+}
+
+#students td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
