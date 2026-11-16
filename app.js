@@ -425,6 +425,8 @@ $('historyResults').innerHTML = data.length
     </table>
   `
   : 'No attendance history found.';
+  };
+} 
   
 
 // School Information Settings
