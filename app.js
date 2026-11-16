@@ -23,7 +23,62 @@ async function getDayRecords(date){const {data,error}=await client.from('attenda
 async function renderAttendance(){const records=await getDayRecords($('attendanceDate').value);const byId=Object.fromEntries(records.map(r=>[r.student_id,r.status]));$('attendanceList').innerHTML=students.length?students.map(s=>`<div class="attendance-row"><div><span class="student">${esc(s.full_name)}</span><small>${esc(s.student_code)} · ${esc(s.class_name||'No class')}</small></div><select class="status-select" data-student="${s.id}"><option ${byId[s.id]==='Present'?'selected':''}>Present</option><option ${byId[s.id]==='Absent'?'selected':''}>Absent</option><option ${byId[s.id]==='Late'?'selected':''}>Late</option><option ${byId[s.id]==='Excused'?'selected':''}>Excused</option></select></div>`).join(''):'<div class="empty">Add students first to record attendance.</div>'}
 $('attendanceDate').onchange=renderAttendance;
 $('saveAttendance').onclick=async()=>{if(!students.length)return notice('recordMsg','Please add students first.');const date=$('attendanceDate').value;if(!date)return notice('recordMsg','Choose a date.');const rows=[...document.querySelectorAll('[data-student]')].map(sel=>({student_id:sel.dataset.student,attendance_date:date,status:sel.value}));const {error}=await client.from('attendance').upsert(rows,{onConflict:'student_id,attendance_date'});notice('recordMsg',error?error.message:'Attendance saved successfully.');if(!error)await loadDashboard()};
-async function loadDashboard(){const {count,error}=await client.from('students').select('*',{count:'exact',head:true});if(error)return;const records=await getDayRecords(today());const present=records.filter(r=>r.status==='Present'||r.status==='Late').length;const absent=records.filter(r=>r.status==='Absent').length;$('totalStudents').textContent=count||0;$('presentToday').textContent=present;$('absentToday').textContent=absent;$('rateToday').textContent=records.length?Math.round(present/records.length*100)+'%':'0%';$('todaySummary').innerHTML=records.length?`<p><b>${records.length}</b> records · ${present} present/late · ${absent} absent · ${records.filter(r=>r.status==='Excused').length} excused</p>`:'No attendance records for today yet.'}
+async function loadDashboard() {
+  const { count, error } = await client
+    .from('students')
+    .select('*', { count: 'exact', head: true });
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  const records = await getDayRecords(today());
+
+  const present = records.filter(r => r.status === 'Present').length;
+  const late = records.filter(r => r.status === 'Late').length;
+  const absent = records.filter(r => r.status === 'Absent').length;
+  const excused = records.filter(r => r.status === 'Excused').length;
+
+  const totalPresent = present + late;
+  const rate = records.length
+    ? Math.round(totalPresent / records.length * 100)
+    : 0;
+
+  $('totalStudents').textContent = count || 0;
+  $('presentToday').textContent = totalPresent;
+  $('absentToday').textContent = absent;
+  $('rateToday').textContent = rate + '%';
+
+  $('todaySummary').innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:15px;">
+      <div class="panel">
+        <h3>Present</h3>
+        <h2>${present}</h2>
+      </div>
+      <div class="panel">
+        <h3>Late</h3>
+        <h2>${late}</h2>
+      </div>
+      <div class="panel">
+        <h3>Absent</h3>
+        <h2>${absent}</h2>
+      </div>
+      <div class="panel">
+        <h3>Excused</h3>
+        <h2>${excused}</h2>
+      </div>
+    </div>
+    <p style="margin-top:20px;">
+      Attendance rate: <b>${rate}%</b>
+    </p>
+    <div style="background:#e5e7eb;height:12px;border-radius:10px;overflow:hidden;">
+      <div style="background:#16a34a;width:${rate}%;height:100%;"></div>
+    </div>
+  `;
+
+  await renderWeeklyAttendance();
+}
 
 $('loadReport').onclick = async () => {
   const records = await getDayRecords($('reportDate').value);
@@ -72,6 +127,61 @@ $('loadReport').onclick = async () => {
     `
     : '<div class="empty">No records for this date.</div>';
 };
+
+// Weekly attendance chart
+async function renderWeeklyAttendance() {
+  const container = $('weeklyChartContent');
+
+  container.innerHTML = 'Loading weekly attendance...';
+
+  const days = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+
+    const dateString =
+      date.getFullYear() + '-' +
+      String(date.getMonth() + 1).padStart(2, '0') + '-' +
+      String(date.getDate()).padStart(2, '0');
+
+    const records = await getDayRecords(dateString);
+
+    const present = records.filter(
+      r => r.status === 'Present' || r.status === 'Late'
+    ).length;
+
+    const rate = records.length
+      ? Math.round(present / records.length * 100)
+      : 0;
+
+    days.push({
+      label: date.toLocaleDateString('en', { weekday: 'short' }),
+      present,
+      rate
+    });
+  }
+
+  container.innerHTML = `
+    <div style="display:flex;align-items:end;gap:12px;height:190px;padding:15px 5px 0;">
+      ${days.map(day => `
+        <div style="flex:1;text-align:center;">
+          <div style="font-size:12px;margin-bottom:6px;">
+            ${day.rate}%
+          </div>
+          <div style="height:130px;display:flex;align-items:end;">
+            <div style="width:100%;height:${day.rate}%;min-height:${day.rate ? 4 : 0}px;background:#16a34a;border-radius:6px 6px 0 0;">
+            </div>
+          </div>
+          <small>${day.label}</small>
+        </div>
+      `).join('')}
+    </div>
+    <p class="muted" style="margin-top:15px;">
+      Daily attendance rate for the last 7 days.
+    </p>
+  `;
+}
 
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 // Export attendance report to CSV
