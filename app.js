@@ -16,7 +16,71 @@ $('login').hidden=true;$('app').hidden=false;$('userEmail').textContent=session.
 client?.auth.onAuthStateChange((_event,session)=>{if(session)setTimeout(startApp,0)});
 document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.hidden=true);$(b.dataset.page).hidden=false;$('pageTitle').textContent=b.textContent.trim()});
 async function loadStudents(){const {data,error}=await client.from('students').select('*').order('student_code');if(error){alert(error.message);return}students=data||[];renderStudents()}
-function renderStudents(){$('studentsRows').innerHTML=students.map(s=>`<tr><td>${esc(s.student_code)}</td><td>${esc(s.full_name)}</td><td>${esc(s.class_name||'—')}</td><td><button class="danger" data-del="${s.id}">Delete</button></td></tr>`).join('');document.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{if(confirm('Delete this student and their attendance records?')){const {error}=await client.from('students').delete().eq('id',b.dataset.del);if(error)alert(error.message);else{await loadStudents();await loadDashboard();await renderAttendance()}}})}
+function renderStudents() {
+  $('studentsRows').innerHTML = students.map(s => `
+    <tr>
+      <td>${esc(s.student_code)}</td>
+      <td>${esc(s.full_name)}</td>
+      <td>${esc(s.class_name || '—')}</td>
+      <td>
+        <button data-edit="${s.id}">Edit</button>
+        <button class="danger" data-del="${s.id}">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+
+  document.querySelectorAll('[data-edit]').forEach(b => {
+    b.onclick = async () => {
+      const student = students.find(s => s.id === b.dataset.edit);
+      if (!student) return;
+
+      const name = prompt('Enter student full name:', student.full_name);
+      if (name === null) return;
+
+      const code = prompt('Enter student ID:', student.student_code);
+      if (code === null) return;
+
+      const semester = prompt('Enter semester:', student.class_name || '');
+      if (semester === null) return;
+
+      const { error } = await client.from('students')
+        .update({
+          full_name: name.trim(),
+          student_code: code.trim(),
+          class_name: semester.trim()
+        })
+        .eq('id', student.id);
+
+      if (error) {
+        alert(error.message);
+      } else {
+        alert('Student updated successfully!');
+        await loadStudents();
+        await loadDashboard();
+        await renderAttendance();
+      }
+    };
+  });
+
+  document.querySelectorAll('[data-del]').forEach(b => {
+    b.onclick = async () => {
+      if (confirm('Delete this student and their attendance records?')) {
+        const { error } = await client.from('students')
+          .delete()
+          .eq('id', b.dataset.del);
+
+        if (error) {
+          alert(error.message);
+        } else {
+          await loadStudents();
+          await loadDashboard();
+          await renderAttendance();
+        }
+      }
+    };
+  });
+}
+
 $('addStudentBtn').onclick=()=>$('studentFormWrap').hidden=false;$('cancelStudent').onclick=()=>$('studentFormWrap').hidden=true;
 $('studentForm').onsubmit=async e=>{e.preventDefault();const row={full_name:$('studentName').value.trim(),student_code:$('studentCode').value.trim(),class_name:$('studentClass').value.trim()};const {error}=await client.from('students').insert(row);if(error){alert(error.message);return}e.target.reset();$('studentFormWrap').hidden=true;await loadStudents();await loadDashboard();await renderAttendance()};
 async function getDayRecords(date){const {data,error}=await client.from('attendance').select('*,students(full_name,student_code,class_name)').eq('attendance_date',date);if(error){alert(error.message);return[]}return data||[]}
