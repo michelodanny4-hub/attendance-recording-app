@@ -104,3 +104,48 @@ tr:hover {
     max-width: 100%;
   }
 }
+
+/* Today's Attendance Overview */
+#todaySummary {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+}
+
+#todaySummary .panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+}
+
+#todaySummary h3 {
+  color: #334155;
+}
+
+#todaySummary h2 {
+  color: #2563eb;
+  font-size: 30px;
+}
+
+/* Weekly Attendance */
+#weeklyChart {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 14px;
+  margin-top: 25px;
+  border: 1px solid #e2e8f0;
+}
+
+#weeklyChart h3 {
+  color: #1e3a8a;
+}
+
+#weeklyChartContent {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
