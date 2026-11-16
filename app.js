@@ -376,31 +376,56 @@ function showHistory() {
     const rate = data.length
       ? Math.round((present + late) / data.length * 100)
       : 0;
+$('historyResults').innerHTML = data.length
+  ? `
+    <h3 style="color:#6b21a8;">Attendance Statistics</h3>
 
-    $('historyResults').innerHTML = data.length
-      ? `
-        <h3>Attendance Statistics</h3>
-        <p><b>Attendance rate:</b> ${rate}%</p>
-        <p><b>Total records:</b> ${data.length}</p>
-        <p>Present: ${present}</p>
-        <p>Absent: ${absent}</p>
-        <p>Late: ${late}</p>
-        <p>Excused: ${excused}</p>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:15px 0;">
 
-        <h4>Attendance History</h4>
-        <table>
-          <tr><th>Date</th><th>Status</th></tr>
-          ${data.map(r => `
-            <tr>
-              <td>${esc(r.attendance_date)}</td>
-              <td>${esc(r.status)}</td>
-            </tr>
-          `).join('')}
-        </table>
-      `
-      : 'No attendance history found.';
-  };
-}
+      <div style="background:#dcfce7;padding:18px;border-radius:12px;">
+        <p style="color:#166534;">Present</p>
+        <h2 style="color:#15803d;">${present}</h2>
+      </div>
+
+      <div style="background:#fee2e2;padding:18px;border-radius:12px;">
+        <p style="color:#991b1b;">Absent</p>
+        <h2 style="color:#dc2626;">${absent}</h2>
+      </div>
+
+      <div style="background:#ffedd5;padding:18px;border-radius:12px;">
+        <p style="color:#9a3412;">Late</p>
+        <h2 style="color:#ea580c;">${late}</h2>
+      </div>
+
+      <div style="background:#f3e8ff;padding:18px;border-radius:12px;">
+        <p style="color:#6b21a8;">Excused</p>
+        <h2 style="color:#9333ea;">${excused}</h2>
+      </div>
+
+    </div>
+
+    <div style="background:#f5f3ff;padding:18px;border-radius:12px;margin:15px 0;">
+      <p><b>Attendance rate: ${rate}%</b></p>
+      <div style="height:12px;background:#ddd6fe;border-radius:10px;overflow:hidden;">
+        <div style="height:100%;width:${rate}%;background:#7e22ce;"></div>
+      </div>
+      <p>Total records: ${data.length}</p>
+    </div>
+
+    <h3 style="color:#6b21a8;">Attendance History</h3>
+
+    <table>
+      <tr><th>Date</th><th>Status</th></tr>
+      ${data.map(r => `
+        <tr>
+          <td>${esc(r.attendance_date)}</td>
+          <td>${esc(r.status)}</td>
+        </tr>
+      `).join('')}
+    </table>
+  `
+  : 'No attendance history found.';
+  
 
 // School Information Settings
 const settingsForm = $('settingsForm');
