@@ -207,3 +207,51 @@ tr:hover {
   padding: 12px;
   border-bottom: 1px solid #e2e8f0;
 }
+/* VIEW HISTORY - PURPLE PROFESSIONAL DESIGN */
+
+#history .panel {
+  background: #faf5ff;
+  border: 1px solid #e9d5ff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 5px 15px rgba(88, 28, 135, 0.08);
+}
+
+#history h3 {
+  color: #6b21a8;
+  font-weight: 700;
+}
+
+#history .muted {
+  color: #7e22ce;
+}
+
+#historyContent {
+  background: #ffffff;
+  border: 1px solid #e9d5ff;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  min-height: 100px;
+}
+
+#historyContent table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#historyContent th {
+  background: #7e22ce;
+  color: #ffffff;
+  padding: 12px;
+  text-align: left;
+}
+
+#historyContent td {
+  padding: 12px;
+  border-bottom: 1px solid #e9d5ff;
+}
+
+#historyContent tr:hover {
+  background: #f3e8ff;
+}
