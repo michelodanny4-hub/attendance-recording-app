@@ -320,12 +320,9 @@ $('printReport').addEventListener('click', function() {
   window.print();
 });
 
-  const win = window.open('', '_blank');
-
-  if (!win) {
-    alert('Please allow pop-ups to print the report.');
-    return;
-  }
+  $('printReport').addEventListener('click', function() {
+  window.print();
+});
 
   win.document.write(`
     <!DOCTYPE html>
