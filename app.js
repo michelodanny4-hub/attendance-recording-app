@@ -322,21 +322,29 @@ $('exportReport').onclick = async () => {
 
   URL.revokeObjectURL(url);
 };
-// Student search feature
+
+// Student search and display feature
 function renderStudents() {
   if (!$('studentSearch')) {
     $('studentsRows').insertAdjacentHTML(
       'beforebegin',
-      '<input id="studentSearch" type="text" placeholder="Search by student name, ID or class..." style="width:100%;padding:12px;margin-bottom:12px;">'
+      '<input id="studentSearch" type="text" placeholder="Search by student name, ID, semester or program..." style="width:100%;padding:12px;margin-bottom:12px;">'
     );
+
     $('studentSearch').addEventListener('input', renderStudents);
   }
 
   const term = $('studentSearch').value.toLowerCase();
 
   const filtered = students.filter(s =>
-    [s.full_name, s.student_code, s.class_name]
-      .some(value => String(value || '').toLowerCase().includes(term))
+    [
+      s.full_name,
+      s.student_code,
+      s.class_name,
+      s.program
+    ].some(value =>
+      String(value || '').toLowerCase().includes(term)
+    )
   );
 
   $('studentsRows').innerHTML = filtered.map(s =>
@@ -344,14 +352,20 @@ function renderStudents() {
       <td>${esc(s.student_code)}</td>
       <td>${esc(s.full_name)}</td>
       <td>${esc(s.class_name || '—')}</td>
-      <td><button class="danger" data-del="${s.id}">Delete</button></td>
+      <td>${esc(s.program || '—')}</td>
+      <td>
+        <button class="danger" data-del="${s.id}">Delete</button>
+      </td>
     </tr>`
   ).join('');
 
   document.querySelectorAll('[data-del]').forEach(b =>
     b.onclick = async () => {
       if (confirm('Delete this student and their attendance records?')) {
-        const {error} = await client.from('students').delete().eq('id', b.dataset.del);
+        const {error} = await client.from('students')
+          .delete()
+          .eq('id', b.dataset.del);
+
         if (error) alert(error.message);
         else {
           await loadStudents();
@@ -362,6 +376,7 @@ function renderStudents() {
     }
   );
 }
+
 // Student attendance history
 document.querySelector('[data-page="history"]')
   ?.addEventListener('click', showHistory);
