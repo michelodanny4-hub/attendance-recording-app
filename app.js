@@ -27,14 +27,12 @@ document.querySelectorAll('.nav').forEach(b => {
       p.hidden = true
     );
 
-    $(b.dataset.page).hidden = false;
-    $('pageTitle').textContent = b.textContent.trim();
+  $(b.dataset.page).hidden = false;
+$('pageTitle').textContent = b.textContent.trim();
 
-    if (b.dataset.page === 'programs' || b.dataset.page === 'students') {
+if (b.dataset.page === 'programs' || b.dataset.page === 'students') {
   await loadPrograms();
 }
-  };
-});
 
 async function loadStudents(){const {data,error}=await client.from('students').select('*').order('student_code');if(error){alert(error.message);return}students=data||[];renderStudents()}
 function renderStudents() {
