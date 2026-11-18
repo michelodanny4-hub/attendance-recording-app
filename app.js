@@ -30,9 +30,9 @@ document.querySelectorAll('.nav').forEach(b => {
     $(b.dataset.page).hidden = false;
     $('pageTitle').textContent = b.textContent.trim();
 
-    if (b.dataset.page === 'programs') {
-      await loadPrograms();
-    }
+    if (b.dataset.page === 'programs' || b.dataset.page === 'students') {
+  await loadPrograms();
+}
   };
 });
 
@@ -106,6 +106,49 @@ document.querySelectorAll('[data-edit]').forEach(b => {
     };
   });
 }
+
+ // Register a new student
+$('studentForm').onsubmit = async e => {
+  e.preventDefault();
+
+  const programSelect = $('studentProgram');
+  const programId = programSelect.value;
+
+  if (!programId) {
+    alert('Please select a programme.');
+    return;
+  }
+
+  const programName =
+    programSelect.options[programSelect.selectedIndex].text;
+
+  const row = {
+    full_name: $('studentName').value.trim(),
+    student_code: $('studentCode').value.trim(),
+    class_name: $('studentClass').value.trim(),
+    program: programName,
+    program_id: Number(programId)
+  };
+
+  const { error } = await client
+    .from('students')
+    .insert(row);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  alert('Student registered successfully!');
+
+  e.target.reset();
+  $('studentFormWrap').hidden = true;
+
+  await loadStudents();
+  await loadDashboard();
+  await renderAttendance();
+  await loadPrograms();
+};
 
 
 // Load university programmes from Supabase
