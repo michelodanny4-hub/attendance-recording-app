@@ -14,7 +14,28 @@ $('logout').onclick=async()=>{await client.auth.signOut();$('app').hidden=true;$
 async function startApp(){if(!configured)return;const {data:{session}}=await client.auth.getSession();if(!session){$('app').hidden=true;$('login').hidden=false;return}
 $('login').hidden=true;$('app').hidden=false;$('userEmail').textContent=session.user.email;await loadStudents();await loadDashboard();await renderAttendance()}
 client?.auth.onAuthStateChange((_event,session)=>{if(session)setTimeout(startApp,0)});
-document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.hidden=true);$(b.dataset.page).hidden=false;$('pageTitle').textContent=b.textContent.trim()});
+
+document.querySelectorAll('.nav').forEach(b => {
+  b.onclick = async () => {
+    document.querySelectorAll('.nav').forEach(x =>
+      x.classList.remove('active')
+    );
+
+    b.classList.add('active');
+
+    document.querySelectorAll('.page').forEach(p =>
+      p.hidden = true
+    );
+
+    $(b.dataset.page).hidden = false;
+    $('pageTitle').textContent = b.textContent.trim();
+
+    if (b.dataset.page === 'programs') {
+      await loadPrograms();
+    }
+  };
+});
+
 async function loadStudents(){const {data,error}=await client.from('students').select('*').order('student_code');if(error){alert(error.message);return}students=data||[];renderStudents()}
 function renderStudents() {
  
@@ -85,6 +106,45 @@ document.querySelectorAll('[data-edit]').forEach(b => {
     };
   });
 }
+
+// Load university programmes from Supabase
+async function loadPrograms() {
+  const { data, error } = await client
+    .from('programs')
+    .select('*')
+    .order('program_name');
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  const { data: studentData, error: studentError } = await client
+    .from('students')
+    .select('program_id');
+
+  if (studentError) {
+    alert(studentError.message);
+    return;
+  }
+
+  const counts = {};
+
+  (studentData || []).forEach(student => {
+    if (student.program_id) {
+      counts[student.program_id] = (counts[student.program_id] || 0) + 1;
+    }
+  });
+
+  $('programsRows').innerHTML = (data || []).map((program, index) => `
+    <tr>
+      <td>${index + 1}</td>
+      <td>${esc(program.program_name)}</td>
+      <td>${counts[program.id] || 0}</td>
+    </tr>
+  `).join('');
+}
+
 
 $('addStudentBtn').onclick=()=>$('studentFormWrap').hidden=false;$('cancelStudent').onclick=()=>$('studentFormWrap').hidden=true;
 $('studentForm').onsubmit = async e => {
