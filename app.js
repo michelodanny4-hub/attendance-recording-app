@@ -201,6 +201,52 @@ async function loadPrograms() {
 }
 
 
+// Get attendance records for a selected date
+async function getDayRecords(date) {
+  const { data, error } = await client
+    .from('attendance')
+    .select('*,students(full_name,student_code,class_name)')
+    .eq('attendance_date', date);
+
+  if (error) {
+    alert(error.message);
+    return [];
+  }
+
+  return data || [];
+}
+
+// Load dashboard information
+async function loadDashboard() {
+  const { count, error } = await client
+    .from('students')
+    .select('*', { count: 'exact', head: true });
+
+  if (error) return;
+
+  const records = await getDayRecords(today());
+
+  const present = records.filter(
+    r => r.status === 'Present' || r.status === 'Late'
+  ).length;
+
+  const absent = records.filter(
+    r => r.status === 'Absent'
+  ).length;
+
+  $('totalStudents').textContent = count || 0;
+  $('presentToday').textContent = present;
+  $('absentToday').textContent = absent;
+
+  $('rateToday').textContent = records.length
+    ? Math.round(present / records.length * 100) + '%'
+    : '0%';
+
+  $('todaySummary').innerHTML = records.length
+    ? `<p><b>${records.length}</b> records · ${present} present/late · ${absent} absent · ${records.filter(r => r.status === 'Excused').length} excused</p>`
+    : 'No attendance records for today yet.';
+}
+
 // Weekly attendance chart
 async function renderWeeklyAttendance() {
   const container = $('weeklyChartContent');
