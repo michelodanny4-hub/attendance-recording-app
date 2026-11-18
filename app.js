@@ -82,7 +82,34 @@ function renderStudents() {
 }
 
 $('addStudentBtn').onclick=()=>$('studentFormWrap').hidden=false;$('cancelStudent').onclick=()=>$('studentFormWrap').hidden=true;
-$('studentForm').onsubmit=async e=>{e.preventDefault();const row={full_name:$('studentName').value.trim(),student_code:$('studentCode').value.trim(),class_name:$('studentClass').value.trim()};const {error}=await client.from('students').insert(row);if(error){alert(error.message);return}e.target.reset();$('studentFormWrap').hidden=true;await loadStudents();await loadDashboard();await renderAttendance()};
+$('studentForm').onsubmit = async e => {
+  e.preventDefault();
+
+  const row = {
+    full_name: $('studentName').value.trim(),
+    student_code: $('studentCode').value.trim(),
+    class_name: $('studentClass').value.trim(),
+    program: $('studentProgram').value.trim()
+  };
+
+  const { error } = await client
+    .from('students')
+    .insert(row);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  alert('Student registered successfully!');
+
+  e.target.reset();
+  $('studentFormWrap').hidden = true;
+
+  await loadStudents();
+  await loadDashboard();
+  await renderAttendance();
+};
 async function getDayRecords(date){const {data,error}=await client.from('attendance').select('*,students(full_name,student_code,class_name)').eq('attendance_date',date);if(error){alert(error.message);return[]}return data||[]}
 async function renderAttendance(){const records=await getDayRecords($('attendanceDate').value);const byId=Object.fromEntries(records.map(r=>[r.student_id,r.status]));$('attendanceList').innerHTML=students.length?students.map(s=>`<div class="attendance-row"><div><span class="student">${esc(s.full_name)}</span><small>${esc(s.student_code)} · ${esc(s.class_name||'No class')}</small></div><select class="status-select" data-student="${s.id}"><option ${byId[s.id]==='Present'?'selected':''}>Present</option><option ${byId[s.id]==='Absent'?'selected':''}>Absent</option><option ${byId[s.id]==='Late'?'selected':''}>Late</option><option ${byId[s.id]==='Excused'?'selected':''}>Excused</option></select></div>`).join(''):'<div class="empty">Add students first to record attendance.</div>'}
 $('attendanceDate').onchange=renderAttendance;
