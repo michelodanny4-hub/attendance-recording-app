@@ -56,7 +56,57 @@
 </div>
   </article>
 </section>
-<section id="students" class="page" hidden><article class="panel"><div class="panel-head"><div><h3>Student directory</h3><p class="muted">Add and manage learners.</p></div><button id="addStudentBtn">+ Add student</button></div><div id="studentFormWrap" hidden><form id="studentForm" class="student-form"><input id="studentName" required placeholder="Full name"><input id="studentCode" required placeholder="Student ID / number"> <input id="studentClass" placeholder="Semester (e.g. Semester 1)"><button type="submit">Save student</button><button type="button" id="cancelStudent" class="secondary">Cancel</button></form></div><div class="table-wrap"><table><thead><tr><th>Student ID</th><th>Name</th><th>Semester</th><th></th></tr></thead><tbody id="studentsRows"></tbody></table></div></article></section>
+<section id="students" class="page" hidden>
+  <article class="panel">
+
+    <div class="panel-head">
+      <div>
+        <h3>Student Directory</h3>
+        <p class="muted">Register and manage university students.</p>
+      </div>
+      <button id="addStudentBtn">+ Add student</button>
+    </div>
+
+    <div id="studentFormWrap" hidden>
+      <form id="studentForm" class="student-form">
+
+        <input id="studentName" required
+          placeholder="Student full name">
+
+        <input id="studentCode" required
+          placeholder="Student ID / number">
+
+        <input id="studentClass"
+          placeholder="Semester (e.g. Semester 1)">
+
+        <input id="studentProgram" required
+          placeholder="Program (e.g. Information Technology)">
+
+        <button type="submit">Save student</button>
+
+        <button type="button" id="cancelStudent"
+          class="secondary">Cancel</button>
+
+      </form>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Semester</th>
+            <th>Program</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="studentsRows"></tbody>
+      </table>
+    </div>
+
+  </article>
+</section>
 <section id="record" class="page" hidden><article class="panel"><div class="panel-head"><div><h3>Record attendance</h3><p class="muted">Choose a date and mark each student.</p></div><input id="attendanceDate" type="date"></div><div id="attendanceList" class="empty">Add students first to record attendance.</div><button id="saveAttendance" class="save-btn">Save attendance</button><p id="recordMsg" class="msg"></p></article></section>
 <section id="reports" class="page" hidden>
   <article class="panel">
