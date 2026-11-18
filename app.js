@@ -17,51 +17,56 @@ client?.auth.onAuthStateChange((_event,session)=>{if(session)setTimeout(startApp
 document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>{document.querySelectorAll('.nav').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.querySelectorAll('.page').forEach(p=>p.hidden=true);$(b.dataset.page).hidden=false;$('pageTitle').textContent=b.textContent.trim()});
 async function loadStudents(){const {data,error}=await client.from('students').select('*').order('student_code');if(error){alert(error.message);return}students=data||[];renderStudents()}
 function renderStudents() {
-  $('studentsRows').innerHTML = students.map(s => `
-    <tr>
-      <td>${esc(s.student_code)}</td>
-      <td>${esc(s.full_name)}</td>
-      <td>${esc(s.class_name || '—')}</td>
-      <td>
-        <button data-edit="${s.id}">Edit</button>
-        <button class="danger" data-del="${s.id}">Delete</button>
-      </td>
-    </tr>
-  `).join('');
+ 
+$('studentsRows').innerHTML = students.map(s => `
+  <tr>
+    <td>${esc(s.student_code)}</td>
+    <td>${esc(s.full_name)}</td>
+    <td>${esc(s.class_name || '—')}</td>
+    <td>${esc(s.program || '—')}</td>
+    <td>
+      <button data-edit="${s.id}">Edit</button>
+      <button class="danger" data-del="${s.id}">Delete</button>
+    </td>
+  </tr>
+`).join('');
 
-  document.querySelectorAll('[data-edit]').forEach(b => {
-    b.onclick = async () => {
-      const student = students.find(s => s.id === b.dataset.edit);
-      if (!student) return;
+document.querySelectorAll('[data-edit]').forEach(b => {
+  b.onclick = async () => {
+    const student = students.find(s => s.id == b.dataset.edit);
+    if (!student) return;
 
-      const name = prompt('Enter student full name:', student.full_name);
-      if (name === null) return;
+    const name = prompt('Enter student full name:', student.full_name);
+    if (name === null) return;
 
-      const code = prompt('Enter student ID:', student.student_code);
-      if (code === null) return;
+    const code = prompt('Enter student ID:', student.student_code);
+    if (code === null) return;
 
-      const semester = prompt('Enter semester:', student.class_name || '');
-      if (semester === null) return;
+    const semester = prompt('Enter semester:', student.class_name || '');
+    if (semester === null) return;
 
-      const { error } = await client.from('students')
-        .update({
-          full_name: name.trim(),
-          student_code: code.trim(),
-          class_name: semester.trim()
-        })
-        .eq('id', student.id);
+    const program = prompt('Enter program:', student.program || '');
+    if (program === null) return;
 
-      if (error) {
-        alert(error.message);
-      } else {
-        alert('Student updated successfully!');
-        await loadStudents();
-        await loadDashboard();
-        await renderAttendance();
-      }
-    };
-  });
+    const { error } = await client.from('students')
+      .update({
+        full_name: name.trim(),
+        student_code: code.trim(),
+        class_name: semester.trim(),
+        program: program.trim()
+      })
+      .eq('id', student.id);
 
+    if (error) {
+      alert(error.message);
+    } else {
+      alert('Student updated successfully!');
+      await loadStudents();
+      await loadDashboard();
+      await renderAttendance();
+    }
+  };
+});
   document.querySelectorAll('[data-del]').forEach(b => {
     b.onclick = async () => {
       if (confirm('Delete this student and their attendance records?')) {
