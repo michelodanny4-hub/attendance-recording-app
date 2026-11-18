@@ -107,6 +107,7 @@ document.querySelectorAll('[data-edit]').forEach(b => {
   });
 }
 
+
 // Load university programmes from Supabase
 async function loadPrograms() {
   const { data, error } = await client
@@ -119,6 +120,16 @@ async function loadPrograms() {
     return;
   }
 
+  // Fill the student registration dropdown
+  $('studentProgram').innerHTML =
+    '<option value="">Select Programme</option>' +
+    (data || []).map(program => `
+      <option value="${program.id}">
+        ${esc(program.program_name)}
+      </option>
+    `).join('');
+
+  // Count students in each programme
   const { data: studentData, error: studentError } = await client
     .from('students')
     .select('program_id');
@@ -132,7 +143,8 @@ async function loadPrograms() {
 
   (studentData || []).forEach(student => {
     if (student.program_id) {
-      counts[student.program_id] = (counts[student.program_id] || 0) + 1;
+      counts[student.program_id] =
+        (counts[student.program_id] || 0) + 1;
     }
   });
 
@@ -145,144 +157,6 @@ async function loadPrograms() {
   `).join('');
 }
 
-
-$('addStudentBtn').onclick=()=>$('studentFormWrap').hidden=false;$('cancelStudent').onclick=()=>$('studentFormWrap').hidden=true;
-$('studentForm').onsubmit = async e => {
-  e.preventDefault();
-
-  const row = {
-    full_name: $('studentName').value.trim(),
-    student_code: $('studentCode').value.trim(),
-    class_name: $('studentClass').value.trim(),
-    program: $('studentProgram').value.trim()
-  };
-
-  const { error } = await client
-    .from('students')
-    .insert(row);
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  alert('Student registered successfully!');
-
-  e.target.reset();
-  $('studentFormWrap').hidden = true;
-
-  await loadStudents();
-  await loadDashboard();
-  await renderAttendance();
-};
-async function getDayRecords(date){const {data,error}=await client.from('attendance').select('*,students(full_name,student_code,class_name)').eq('attendance_date',date);if(error){alert(error.message);return[]}return data||[]}
-async function renderAttendance(){const records=await getDayRecords($('attendanceDate').value);const byId=Object.fromEntries(records.map(r=>[r.student_id,r.status]));$('attendanceList').innerHTML=students.length?students.map(s=>`<div class="attendance-row"><div><span class="student">${esc(s.full_name)}</span><small>${esc(s.student_code)} · ${esc(s.class_name||'No class')}</small></div><select class="status-select" data-student="${s.id}"><option ${byId[s.id]==='Present'?'selected':''}>Present</option><option ${byId[s.id]==='Absent'?'selected':''}>Absent</option><option ${byId[s.id]==='Late'?'selected':''}>Late</option><option ${byId[s.id]==='Excused'?'selected':''}>Excused</option></select></div>`).join(''):'<div class="empty">Add students first to record attendance.</div>'}
-$('attendanceDate').onchange=renderAttendance;
-$('saveAttendance').onclick=async()=>{if(!students.length)return notice('recordMsg','Please add students first.');const date=$('attendanceDate').value;if(!date)return notice('recordMsg','Choose a date.');const rows=[...document.querySelectorAll('[data-student]')].map(sel=>({student_id:sel.dataset.student,attendance_date:date,status:sel.value}));const {error}=await client.from('attendance').upsert(rows,{onConflict:'student_id,attendance_date'});notice('recordMsg',error?error.message:'Attendance saved successfully.');if(!error)await loadDashboard()};
-async function loadDashboard() {
-  const { count, error } = await client
-    .from('students')
-    .select('*', { count: 'exact', head: true });
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  const records = await getDayRecords(today());
-
-  const present = records.filter(r => r.status === 'Present').length;
-  const late = records.filter(r => r.status === 'Late').length;
-  const absent = records.filter(r => r.status === 'Absent').length;
-  const excused = records.filter(r => r.status === 'Excused').length;
-
-  const totalPresent = present + late;
-  const rate = records.length
-    ? Math.round(totalPresent / records.length * 100)
-    : 0;
-
-  $('totalStudents').textContent = count || 0;
-  $('presentToday').textContent = totalPresent;
-  $('absentToday').textContent = absent;
-  $('rateToday').textContent = rate + '%';
-
-  $('todaySummary').innerHTML = `
-    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;margin-top:15px;">
-      <div class="panel">
-        <h3>Present</h3>
-        <h2>${present}</h2>
-      </div>
-      <div class="panel">
-        <h3>Late</h3>
-        <h2>${late}</h2>
-      </div>
-      <div class="panel">
-        <h3>Absent</h3>
-        <h2>${absent}</h2>
-      </div>
-      <div class="panel">
-        <h3>Excused</h3>
-        <h2>${excused}</h2>
-      </div>
-    </div>
-    <p style="margin-top:20px;">
-      Attendance rate: <b>${rate}%</b>
-    </p>
-    <div style="background:#e5e7eb;height:12px;border-radius:10px;overflow:hidden;">
-      <div style="background:#16a34a;width:${rate}%;height:100%;"></div>
-    </div>
-  `;
-
-  await renderWeeklyAttendance();
-}
-
-$('loadReport').onclick = async () => {
-  const records = await getDayRecords($('reportDate').value);
-
-  const schoolName = localStorage.getItem('schoolName') || 'School Name';
-  const schoolAddress = localStorage.getItem('schoolAddress') || '';
-  const schoolContact = localStorage.getItem('schoolContact') || '';
-
-  $('reportContent').innerHTML = records.length
-    ? `
-      <div class="table-wrap">
-
-        <div style="text-align:center;margin-bottom:20px;">
-          <h2>${esc(schoolName)}</h2>
-          <p>${esc(schoolAddress)}</p>
-          <p>Contact: ${esc(schoolContact)}</p>
-          <h3>ATTENDANCE REPORT</h3>
-          <p>Date: ${esc($('reportDate').value)}</p>
-          <hr>
-        </div>
-
-        <table>
-          <thead>
-            <tr>
-              <th>Student ID</th>
-              <th>Name</th>
-              <th>Class</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            ${records.map(r => `
-              <tr>
-                <td>${esc(r.students?.student_code || '')}</td>
-                <td>${esc(r.students?.full_name || '')}</td>
-                <td>${esc(r.students?.class_name || '—')}</td>
-                <td>${esc(r.status)}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-
-        <p><b>${records.length} attendance records</b></p>
-      </div>
-    `
-    : '<div class="empty">No records for this date.</div>';
-};
 
 // Weekly attendance chart
 async function renderWeeklyAttendance() {
