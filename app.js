@@ -247,6 +247,74 @@ async function loadDashboard() {
     : 'No attendance records for today yet.';
 }
 
+
+ // Display and save student attendance
+async function renderAttendance() {
+  const date = $('attendanceDate').value || today();
+  const list = $('attendanceList');
+
+  if (!students.length) {
+    list.innerHTML = 'Add students first to record attendance.';
+    return;
+  }
+
+  const records = await getDayRecords(date);
+  const saved = {};
+
+  records.forEach(record => {
+    saved[record.student_id] = record.status;
+  });
+
+  const statuses = ['Present', 'Absent', 'Late', 'Excused'];
+
+  list.innerHTML = students.map(student => `
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;border-bottom:1px solid #ddd;">
+      <div>
+        <strong>${esc(student.full_name)}</strong>
+        <small style="display:block;">${esc(student.student_code)}</small>
+      </div>
+
+      <select data-attendance-student="${student.id}">
+        ${statuses.map(status => `
+          <option value="${status}"
+            ${saved[student.id] === status ? 'selected' : ''}>
+            ${status}
+          </option>
+        `).join('')}
+      </select>
+    </div>
+  `).join('');
+
+  $('attendanceDate').onchange = renderAttendance;
+
+  $('saveAttendance').onclick = async () => {
+    const selects = list.querySelectorAll('[data-attendance-student]');
+
+    const rows = Array.from(selects).map(select => ({
+      student_id: select.dataset.attendanceStudent,
+      attendance_date: $('attendanceDate').value,
+      status: select.value
+    }));
+
+    const { error } = await client
+      .from('attendance')
+      .upsert(rows, {
+        onConflict: 'student_id,attendance_date'
+      });
+
+    if (error) {
+      $('recordMsg').textContent = error.message;
+      return;
+    }
+
+    $('recordMsg').textContent = 'Attendance saved successfully!';
+
+    await loadDashboard();
+    await renderWeeklyAttendance();
+  };
+}
+
+
 // Weekly attendance chart
 async function renderWeeklyAttendance() {
   const container = $('weeklyChartContent');
