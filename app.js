@@ -33,7 +33,8 @@ $('pageTitle').textContent = b.textContent.trim();
 if (b.dataset.page === 'programs' || b.dataset.page === 'students') {
   await loadPrograms();
 }
-
+  };
+});
 async function loadStudents(){const {data,error}=await client.from('students').select('*').order('student_code');if(error){alert(error.message);return}students=data||[];renderStudents()}
 function renderStudents() {
  
