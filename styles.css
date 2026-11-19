@@ -345,5 +345,73 @@ tr:hover {
   }
 }
 
-    
+ 
+/* DASHBOARD: PROGRAMMES AND ATTENDANCE SIDE BY SIDE */
+.dashboard-overview {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-bottom: 22px;
+  align-items: stretch;
+}
+
+.dashboard-overview .panel {
+  border-radius: 16px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.05);
+  min-width: 0;
+}
+
+.dashboard-overview .panel-head {
+  margin-bottom: 16px;
+}
+
+.dashboard-overview .panel h3 {
+  color: #172554;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.dashboard-overview .muted {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.attendance-summary-card {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 105px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #eef0ff;
+}
+
+.attendance-icon {
+  font-size: 48px;
+  border-right: 2px solid #c7c9e8;
+  padding-right: 20px;
+}
+
+#todaySummary {
+  flex: 1;
+  min-width: 0;
+  color: #172554;
+  background: transparent;
+  padding: 0;
+}
+
+#todaySummary p {
+  margin: 0;
+  line-height: 1.8;
+}
+
+@media(max-width: 850px) {
+  .dashboard-overview {
+    grid-template-columns: 1fr;
+  }
+}
+   
 }
