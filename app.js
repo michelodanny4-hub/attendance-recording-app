@@ -441,7 +441,7 @@ $('exportReport').onclick = async () => {
   URL.revokeObjectURL(url);
 };
 
-// Student search and display feature
+// Student search and programme filtering
 function renderStudents() {
   if (!$('studentSearch')) {
     $('studentsRows').insertAdjacentHTML(
@@ -452,19 +452,28 @@ function renderStudents() {
     $('studentSearch').addEventListener('input', renderStudents);
   }
 
+  // Get search text and selected programme
   const term = $('studentSearch').value.toLowerCase();
+  const selectedProgram = $('programFilter').value;
 
-  const filtered = students.filter(s =>
-    [
+  // Filter students
+  const filtered = students.filter(s => {
+    const matchesSearch = [
       s.full_name,
       s.student_code,
       s.class_name,
       s.program
     ].some(value =>
       String(value || '').toLowerCase().includes(term)
-    )
-  );
+    );
 
+    const matchesProgram =
+      !selectedProgram || String(s.program_id) === selectedProgram;
+
+    return matchesSearch && matchesProgram;
+  });
+
+  // Display students
   $('studentsRows').innerHTML = filtered.map(s =>
     `<tr>
       <td>${esc(s.student_code)}</td>
@@ -477,6 +486,7 @@ function renderStudents() {
     </tr>`
   ).join('');
 
+  // Delete student
   document.querySelectorAll('[data-del]').forEach(b =>
     b.onclick = async () => {
       if (confirm('Delete this student and their attendance records?')) {
@@ -494,6 +504,10 @@ function renderStudents() {
     }
   );
 }
+
+// Update list when programme changes
+$('programFilter').addEventListener('change', renderStudents);
+
 
 // Student attendance history
 document.querySelector('[data-page="history"]')
