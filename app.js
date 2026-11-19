@@ -283,15 +283,62 @@ async function loadPrograms() {
       <td>${counts[program.id] || 0}</td>
     </tr>
   `).join('');
-  // Display programme summary on Dashboard
-  $('programmeSummary').innerHTML = (data || []).map(program => `
-    <div style="padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;">
-      <strong>${esc(program.program_name)}</strong>
-      <span style="float:right;font-weight:bold;">
-        ${counts[program.id] || 0} Students
-      </span>
+
+// Display professional programme summary on Dashboard
+const totalProgramStudents = (data || []).reduce(
+  (sum, program) => sum + (counts[program.id] || 0),
+  0
+);
+
+$('programmeSummary').innerHTML = (data || []).map(program => {
+  const studentCount = counts[program.id] || 0;
+
+  const percentage = totalProgramStudents
+    ? Math.round(studentCount / totalProgramStudents * 100)
+    : 0;
+
+  return `
+    <div style="
+      padding:16px;
+      margin:10px 0;
+      background:#f8fafc;
+      border:1px solid #e2e8f0;
+      border-radius:12px;
+    ">
+      <div style="
+        display:flex;
+        justify-content:space-between;
+        gap:12px;
+        margin-bottom:12px;
+      ">
+        <strong>${esc(program.program_name)}</strong>
+        <strong style="color:#2563eb;white-space:nowrap;">
+          ${studentCount} Students
+        </strong>
+      </div>
+
+      <div style="
+        height:9px;
+        background:#e2e8f0;
+        border-radius:10px;
+        overflow:hidden;
+      ">
+        <div style="
+          width:${percentage}%;
+          height:100%;
+          background:#2563eb;
+          border-radius:10px;
+        "></div>
+      </div>
+
+      <small style="color:#64748b;">
+        ${percentage}% of enrolled students
+      </small>
     </div>
-  `).join('');
+  `;
+}).join('');
+
+  
 }
 // Get attendance records for a selected date
 async function getDayRecords(date) {
