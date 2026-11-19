@@ -34,7 +34,11 @@
       <p class="muted">Today's attendance</p>
     </article>
   </div>
-    <!-- Programme Summary -->
+
+<!-- Programme Summary and Today's Attendance -->
+<div class="dashboard-overview">
+
+  <!-- Programme Summary -->
   <article class="panel">
     <div class="panel-head">
       <div>
@@ -48,28 +52,40 @@
     </div>
   </article>
 
+  <!-- Today's Attendance Overview -->
   <article class="panel">
     <div class="panel-head">
       <div>
-        <h3>Today's Attendance Overview</h3>
-        <p class="muted">
-          Summary of attendance records for today.
-        </p>
+        <h3>📅 Today's Attendance Overview</h3>
+        <p class="muted">Summary of attendance records for today.</p>
       </div>
     </div>
 
-    <div id="todaySummary" class="empty">
-      No attendance records for today yet.
+    <div class="attendance-summary-card">
+      <div class="attendance-icon">👥</div>
+      <div id="todaySummary" class="empty">
+        No attendance records for today yet.
+      </div>
     </div>
-    <div id="weeklyChart" style="margin-top:25px;">
-  <h3>Weekly Attendance</h3>
-  <p class="muted">Attendance trends over the last 7 days.</p>
-  <div id="weeklyChartContent">
-    Loading weekly attendance...
-  </div>
-</div>
   </article>
+
+</div>
+
+<!-- Weekly Attendance -->
+<article class="panel">
+  <div id="weeklyChart">
+    <h3>Weekly Attendance</h3>
+    <p class="muted">Attendance trends over the last 7 days.</p>
+    <div id="weeklyChartContent">
+      Loading weekly attendance...
+    </div>
+  </div>
+</article>
+
 </section>
+
+
+  
 <section id="students" class="page" hidden>
   <article class="panel">
 
