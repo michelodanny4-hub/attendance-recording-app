@@ -1,6 +1,6 @@
 // Fill these two values from Supabase: Project Settings > API
 const SUPABASE_URL = "https://jknunotwyultgevdnecj.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_kvxiC12zDPT5i160RKoToA_2eDyXf1U";
+const SUPABASE_ANON_KEY = "sb_publishable_kvxiC12zDPT5i160RKofToA_2eDyXf1U";
 const configured = !SUPABASE_URL.includes("YOUR_") && !SUPABASE_ANON_KEY.includes("YOUR_");
 const client = configured ? window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY) : null;
 const $=id=>document.getElementById(id);
@@ -33,6 +33,23 @@ async function startApp() {
   await renderAttendance();
   await renderWeeklyAttendance();
 }
+
+// Main menu navigation
+document.querySelectorAll('[data-page]').forEach(button => {
+  button.addEventListener('click', () => {
+    document.querySelectorAll('.page').forEach(page => {
+      page.hidden = true;
+    });
+
+    const page = document.getElementById(button.dataset.page);
+
+    if (page) {
+      page.hidden = false;
+    }
+
+    $('pageTitle').textContent = button.textContent.trim();
+  });
+});
 
 // Load students from Supabase
 async function loadStudents() {
