@@ -453,7 +453,36 @@ tr:hover {
   border-top: 4px solid #9333ea;
   background: #faf5ff;
 }
+/* STUDENTS TABLE IMPROVEMENTS */
 
+#students table {
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+#students tbody tr {
+  transition: background 0.2s;
+}
+
+#students tbody tr:hover {
+  background: #f1f5f9;
+}
+
+#students td {
+  font-size: 14px;
+  color: #334155;
+}
+
+#students th {
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+#students tbody tr:last-child td {
+  border-bottom: none;
+}
 
 
 
