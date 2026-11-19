@@ -36,57 +36,91 @@ if (b.dataset.page === 'programs' || b.dataset.page === 'students') {
   };
 });
 async function loadStudents(){const {data,error}=await client.from('students').select('*').order('student_code');if(error){alert(error.message);return}students=data||[];renderStudents()}
+
+
+// Student search, programme filtering, editing and deleting
 function renderStudents() {
- 
-$('studentsRows').innerHTML = students.map(s => `
-  <tr>
-    <td>${esc(s.student_code)}</td>
-    <td>${esc(s.full_name)}</td>
-    <td>${esc(s.class_name || '—')}</td>
-    <td>${esc(s.program || '—')}</td>
-    <td>
-      <button data-edit="${s.id}">Edit</button>
-      <button class="danger" data-del="${s.id}">Delete</button>
-    </td>
-  </tr>
-`).join('');
 
-document.querySelectorAll('[data-edit]').forEach(b => {
-  b.onclick = async () => {
-    const student = students.find(s => s.id == b.dataset.edit);
-    if (!student) return;
+  if (!$('studentSearch')) {
+    $('studentsRows').insertAdjacentHTML(
+      'beforebegin',
+      '<input id="studentSearch" type="text" placeholder="Search by student name, ID, semester or program..." style="width:100%;padding:12px;margin-bottom:12px;">'
+    );
 
-    const name = prompt('Enter student full name:', student.full_name);
-    if (name === null) return;
+    $('studentSearch').addEventListener('input', renderStudents);
+  }
 
-    const code = prompt('Enter student ID:', student.student_code);
-    if (code === null) return;
+  const term = $('studentSearch').value.toLowerCase();
+  const selectedProgram = $('programFilter').value;
 
-    const semester = prompt('Enter semester:', student.class_name || '');
-    if (semester === null) return;
+  const filtered = students.filter(s => {
+    const matchesSearch = [
+      s.full_name,
+      s.student_code,
+      s.class_name,
+      s.program
+    ].some(value =>
+      String(value || '').toLowerCase().includes(term)
+    );
 
-    const program = prompt('Enter program:', student.program || '');
-    if (program === null) return;
+    const matchesProgram =
+      !selectedProgram || String(s.program_id) === selectedProgram;
 
-    const { error } = await client.from('students')
-      .update({
-        full_name: name.trim(),
-        student_code: code.trim(),
-        class_name: semester.trim(),
-        program: program.trim()
-      })
-      .eq('id', student.id);
+    return matchesSearch && matchesProgram;
+  });
 
-    if (error) {
-      alert(error.message);
-    } else {
-      alert('Student updated successfully!');
-      await loadStudents();
-      await loadDashboard();
-      await renderAttendance();
-    }
-  };
-});
+  $('studentsRows').innerHTML = filtered.map(s => `
+    <tr>
+      <td>${esc(s.student_code)}</td>
+      <td>${esc(s.full_name)}</td>
+      <td>${esc(s.class_name || '—')}</td>
+      <td>${esc(s.program || '—')}</td>
+      <td>
+        <button data-edit="${s.id}">Edit</button>
+        <button class="danger" data-del="${s.id}">Delete</button>
+      </td>
+    </tr>
+  `).join('');
+
+  // Edit student
+  document.querySelectorAll('[data-edit]').forEach(b => {
+    b.onclick = async () => {
+      const student = students.find(s => s.id == b.dataset.edit);
+      if (!student) return;
+
+      const name = prompt('Enter student full name:', student.full_name);
+      if (name === null) return;
+
+      const code = prompt('Enter student ID:', student.student_code);
+      if (code === null) return;
+
+      const semester = prompt('Enter semester:', student.class_name || '');
+      if (semester === null) return;
+
+      const program = prompt('Enter program:', student.program || '');
+      if (program === null) return;
+
+      const { error } = await client.from('students')
+        .update({
+          full_name: name.trim(),
+          student_code: code.trim(),
+          class_name: semester.trim(),
+          program: program.trim()
+        })
+        .eq('id', student.id);
+
+      if (error) {
+        alert(error.message);
+      } else {
+        alert('Student updated successfully!');
+        await loadStudents();
+        await loadDashboard();
+        await renderAttendance();
+      }
+    };
+  });
+
+  // Delete student
   document.querySelectorAll('[data-del]').forEach(b => {
     b.onclick = async () => {
       if (confirm('Delete this student and their attendance records?')) {
@@ -105,6 +139,9 @@ document.querySelectorAll('[data-edit]').forEach(b => {
     };
   });
 }
+
+// Update list when programme changes
+$('programFilter').addEventListener('change', renderStudents);
 
  // Open and close student registration form
 $('addStudentBtn').onclick = () => {
