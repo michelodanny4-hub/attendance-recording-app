@@ -284,59 +284,55 @@ async function loadPrograms() {
     </tr>
   `).join('');
 
-// Display professional programme summary on Dashboard
+
+// Display Programme Summary as a professional table
 const totalProgramStudents = (data || []).reduce(
   (sum, program) => sum + (counts[program.id] || 0),
   0
 );
 
-$('programmeSummary').innerHTML = (data || []).map(program => {
-  const studentCount = counts[program.id] || 0;
-
-  const percentage = totalProgramStudents
-    ? Math.round(studentCount / totalProgramStudents * 100)
-    : 0;
-
-  return `
-    <div style="
-      padding:16px;
-      margin:10px 0;
-      background:#f8fafc;
-      border:1px solid #e2e8f0;
-      border-radius:12px;
+$('programmeSummary').innerHTML = `
+  <div style="overflow-x:auto;">
+    <table style="
+      width:100%;
+      border-collapse:collapse;
+      background:white;
+      border:1px solid #dbe3f0;
+      border-radius:10px;
+      overflow:hidden;
     ">
-      <div style="
-        display:flex;
-        justify-content:space-between;
-        gap:12px;
-        margin-bottom:12px;
-      ">
-        <strong>${esc(program.program_name)}</strong>
-        <strong style="color:#2563eb;white-space:nowrap;">
-          ${studentCount} Students
-        </strong>
-      </div>
+      <thead>
+        <tr style="background:#eaf0ff;">
+          <th style="padding:14px;text-align:left;border:1px solid #dbe3f0;">Programme</th>
+          <th style="padding:14px;text-align:center;border:1px solid #dbe3f0;">Students</th>
+          <th style="padding:14px;text-align:center;border:1px solid #dbe3f0;">Percentage</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${(data || []).map(program => {
+          const studentCount = counts[program.id] || 0;
+          const percentage = totalProgramStudents
+            ? (studentCount / totalProgramStudents * 100).toFixed(1)
+            : '0.0';
 
-      <div style="
-        height:9px;
-        background:#e2e8f0;
-        border-radius:10px;
-        overflow:hidden;
-      ">
-        <div style="
-          width:${percentage}%;
-          height:100%;
-          background:#2563eb;
-          border-radius:10px;
-        "></div>
-      </div>
-
-      <small style="color:#64748b;">
-        ${percentage}% of enrolled students
-      </small>
-    </div>
-  `;
-}).join('');
+          return `
+            <tr>
+              <td style="padding:12px;border:1px solid #dbe3f0;">
+                ${esc(program.program_name)}
+              </td>
+              <td style="padding:12px;text-align:center;border:1px solid #dbe3f0;">
+                ${studentCount}
+              </td>
+              <td style="padding:12px;text-align:center;border:1px solid #dbe3f0;">
+                ${percentage}%
+              </td>
+            </tr>
+          `;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>
+`;
 
   
 }
