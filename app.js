@@ -557,25 +557,35 @@ async function renderWeeklyAttendance() {
     });
   }
 
-  container.innerHTML = `
-    <div style="display:flex;align-items:end;gap:12px;height:190px;padding:15px 5px 0;">
-      ${days.map(day => `
-        <div style="flex:1;text-align:center;">
-          <div style="font-size:12px;margin-bottom:6px;">
-            ${day.rate}%
-          </div>
-          <div style="height:130px;display:flex;align-items:end;">
-            <div style="width:100%;height:${day.rate}%;min-height:${day.rate ? 4 : 0}px;background:#2563eb;border-radius:6px 6px 0 0;">
-            </div>
-          </div>
-          <small>${day.label}</small>
+ container.innerHTML = `
+  <div style="display:flex;align-items:end;gap:14px;height:210px;padding:15px 5px 0;">
+    ${days.map(day => `
+      <div style="flex:1;text-align:center;min-width:0;">
+        <div style="font-size:13px;font-weight:700;color:#172554;margin-bottom:8px;">
+          ${day.rate}%
         </div>
-      `).join('')}
-    </div>
-    <p class="muted" style="margin-top:15px;">
-      Daily attendance rate for the last 7 days.
-    </p>
-  `;
+
+        <div style="height:135px;display:flex;align-items:end;background:#f1f5f9;border-radius:9px 9px 0 0;overflow:hidden;">
+          <div style="
+            width:100%;
+            height:${day.rate}%;
+            min-height:${day.rate ? 4 : 0}px;
+            background:linear-gradient(180deg,#60a5fa,#2563eb);
+            border-radius:9px 9px 0 0;
+          "></div>
+        </div>
+
+        <small style="display:block;margin-top:9px;color:#475569;font-weight:600;">
+          ${day.label}
+        </small>
+      </div>
+    `).join('')}
+  </div>
+
+  <p class="muted" style="margin-top:18px;">
+    Daily attendance rate for the last 7 days.
+  </p>
+`;
 }
 
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
