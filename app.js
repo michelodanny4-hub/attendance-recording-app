@@ -385,21 +385,30 @@ const excused = records.filter(
 $('todaySummary').innerHTML = records.length
   ? `
     <div>
-      <strong style="
-        display:block;
-        font-size:25px;
-        color:#172554;
-        margin-bottom:8px;
-      ">
+      <strong style="display:block;font-size:25px;color:#172554;margin-bottom:8px;">
         ${records.length} Records Today
       </strong>
+
       <p style="font-size:14px;color:#172554;">
-        <span style="color:#16a34a;">${present} present/late</span>
+        <span style="color:#16a34a;">${present} Present/Late</span>
         &nbsp; • &nbsp;
-        <span style="color:#dc2626;">${absent} absent</span>
+        <span style="color:#dc2626;">${absent} Absent</span>
         &nbsp; • &nbsp;
-        <span>${excused} excused</span>
+        <span style="color:#64748b;">${excused} Excused</span>
       </p>
+
+      <div style="margin-top:15px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <strong>Attendance rate</strong>
+          <strong style="color:#2563eb;">
+            ${Math.round(present / records.length * 100)}%
+          </strong>
+        </div>
+
+        <div style="height:10px;background:#e2e8f0;border-radius:10px;overflow:hidden;">
+          <div style="width:${present / records.length * 100}%;height:100%;background:#2563eb;border-radius:10px;"></div>
+        </div>
+      </div>
     </div>
   `
   : '<strong>0 Records Today</strong><p>No attendance records yet.</p>';
