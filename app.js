@@ -226,7 +226,15 @@ async function loadPrograms() {
     </tr>
   `).join('');
 }
-
+  // Display programme summary on Dashboard
+  $('programmeSummary').innerHTML = (data || []).map(program => `
+    <div style="padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;">
+      <strong>${esc(program.program_name)}</strong>
+      <span style="float:right;font-weight:bold;">
+        ${counts[program.id] || 0} Students
+      </span>
+    </div>
+  `).join('');
 
 // Get attendance records for a selected date
 async function getDayRecords(date) {
