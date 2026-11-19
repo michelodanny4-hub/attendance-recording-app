@@ -33,7 +33,23 @@ async function startApp() {
   await renderAttendance();
   await renderWeeklyAttendance();
 }
- 
+
+// Load students from Supabase
+async function loadStudents() {
+  const { data, error } = await client
+    .from('students')
+    .select('*')
+    .order('student_code');
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  students = data || [];
+  renderStudents();
+}
+
 function renderStudents() {
   if (!$('studentSearch')) {
     $('studentsRows').insertAdjacentHTML(
