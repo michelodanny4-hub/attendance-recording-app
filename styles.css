@@ -483,7 +483,44 @@ tr:hover {
 #students tbody tr:last-child td {
   border-bottom: none;
 }
+/* PROGRAMMES PAGE - PROFESSIONAL DESIGN */
 
+#programs .panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+#programs h3 {
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+#programs table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#programs th {
+  background: #eff6ff;
+  color: #1e3a8a;
+  padding: 14px;
+  text-align: left;
+  font-size: 13px;
+}
+
+#programs td {
+  padding: 14px;
+  border-bottom: 1px solid #e2e8f0;
+  color: #334155;
+  font-size: 14px;
+}
+
+#programs tbody tr:hover {
+  background: #f1f5f9;
+}
 
 
 
