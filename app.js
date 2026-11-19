@@ -11,114 +11,29 @@ function notice(el,msg){$(el).textContent=msg}
 $('loginForm').addEventListener('submit',async e=>{e.preventDefault();if(!configured){notice('loginMsg','Setup required: add your Supabase URL and anon key in app.js.');return}
 const {error}=await client.auth.signInWithPassword({email:$('email').value,password:$('password').value});notice('loginMsg',error?error.message:'');if(!error)await startApp()});
 $('logout').onclick=async()=>{await client.auth.signOut();$('app').hidden=true;$('login').hidden=false};
-async function startApp(){if(!configured)return;const {data:{session}}=await client.auth.getSession();if(!session){$('app').hidden=true;$('login').hidden=false;return}
-$('login').hidden=true;$('app').hidden=false;$('userEmail').textContent=session.user.email;await loadStudents();await loadDashboard();await renderAttendance()}
-client?.auth.onAuthStateChange((_event,session)=>{if(session)setTimeout(startApp,0)});
 
-document.querySelectorAll('.nav').forEach(b => {
-  b.onclick = async () => {
-    document.querySelectorAll('.nav').forEach(x =>
-      x.classList.remove('active')
-    );
+async function startApp() {
+  if (!configured) return;
 
-    b.classList.add('active');
+  const { data: { session } } = await client.auth.getSession();
 
-    document.querySelectorAll('.page').forEach(p =>
-      p.hidden = true
-    );
-
-  $(b.dataset.page).hidden = false;
-$('pageTitle').textContent = b.textContent.trim();
-
-if (b.dataset.page === 'programs' || b.dataset.page === 'students') {
-  await loadPrograms();
-}
-  };
-});
-async function loadStudents(){const {data,error}=await client.from('students').select('*').order('student_code');if(error){alert(error.message);return}students=data||[];renderStudents()}
-
-
-// Student search, programme filtering, editing and deleting
-function renderStudents() {
-
-  if (!$('studentSearch')) {
-    $('studentsRows').insertAdjacentHTML(
-      'beforebegin',
-      '<input id="studentSearch" type="text" placeholder="Search by student name, ID, semester or program..." style="width:100%;padding:12px;margin-bottom:12px;">'
-    );
-
-    $('studentSearch').addEventListener('input', renderStudents);
+  if (!session) {
+    $('app').hidden = true;
+    $('login').hidden = false;
+    return;
   }
 
-  const term = $('studentSearch').value.toLowerCase();
-  const selectedProgram = $('programFilter').value;
+  $('login').hidden = true;
+  $('app').hidden = false;
+  $('userEmail').textContent = session.user.email;
 
-  const filtered = students.filter(s => {
-    const matchesSearch = [
-      s.full_name,
-      s.student_code,
-      s.class_name,
-      s.program
-    ].some(value =>
-      String(value || '').toLowerCase().includes(term)
-    );
+  await loadStudents();
+  await loadPrograms();
+  await loadDashboard();
+  await renderAttendance();
+  await renderWeeklyAttendance();
+}
 
-    const matchesProgram =
-      !selectedProgram || String(s.program_id) === selectedProgram;
-
-    return matchesSearch && matchesProgram;
-  });
-
-  $('studentsRows').innerHTML = filtered.map(s => `
-    <tr>
-      <td>${esc(s.student_code)}</td>
-      <td>${esc(s.full_name)}</td>
-      <td>${esc(s.class_name || '—')}</td>
-      <td>${esc(s.program || '—')}</td>
-      <td>
-        <button data-edit="${s.id}">Edit</button>
-        <button class="danger" data-del="${s.id}">Delete</button>
-      </td>
-    </tr>
-  `).join('');
-
-  // Edit student
-  document.querySelectorAll('[data-edit]').forEach(b => {
-    b.onclick = async () => {
-      const student = students.find(s => s.id == b.dataset.edit);
-      if (!student) return;
-
-      const name = prompt('Enter student full name:', student.full_name);
-      if (name === null) return;
-
-      const code = prompt('Enter student ID:', student.student_code);
-      if (code === null) return;
-
-      const semester = prompt('Enter semester:', student.class_name || '');
-      if (semester === null) return;
-
-      const program = prompt('Enter program:', student.program || '');
-      if (program === null) return;
-
-      const { error } = await client.from('students')
-        .update({
-          full_name: name.trim(),
-          student_code: code.trim(),
-          class_name: semester.trim(),
-          program: program.trim()
-        })
-        .eq('id', student.id);
-
-      if (error) {
-        alert(error.message);
-      } else {
-        alert('Student updated successfully!');
-        await loadStudents();
-        await loadDashboard();
-        await renderAttendance();
-      }
-    };
-  });
 
   // Delete student
   document.querySelectorAll('[data-del]').forEach(b => {
