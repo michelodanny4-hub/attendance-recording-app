@@ -488,7 +488,7 @@ async function renderWeeklyAttendance() {
             ${day.rate}%
           </div>
           <div style="height:130px;display:flex;align-items:end;">
-            <div style="width:100%;height:${day.rate}%;min-height:${day.rate ? 4 : 0}px;background:#16a34a;border-radius:6px 6px 0 0;">
+            <div style="width:100%;height:${day.rate}%;min-height:${day.rate ? 4 : 0}px;background:#2563eb;border-radius:6px 6px 0 0;">
             </div>
           </div>
           <small>${day.label}</small>
