@@ -340,6 +340,45 @@ async function loadDashboard() {
 }
 
 
+// View attendance report for selected date
+$('loadReport').onclick = async () => {
+  const date = $('reportDate').value;
+
+  if (!date) {
+    alert('Please select a date first.');
+    return;
+  }
+
+  const records = await getDayRecords(date);
+
+  $('reportContent').innerHTML = records.length
+    ? `
+      <h3>Attendance Report - ${esc(date)}</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Class</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${records.map(r => `
+            <tr>
+              <td>${esc(r.students?.student_code || '')}</td>
+              <td>${esc(r.students?.full_name || '')}</td>
+              <td>${esc(r.students?.class_name || '')}</td>
+              <td>${esc(r.status)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `
+    : 'No attendance records found for this date.';
+};
+
+
  // Display and save student attendance
 async function renderAttendance() {
   const date = $('attendanceDate').value || today();
