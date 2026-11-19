@@ -521,7 +521,45 @@ tr:hover {
 #programs tbody tr:hover {
   background: #f1f5f9;
 }
+/* ATTENDANCE PAGE - PROFESSIONAL DESIGN */
 
+#record .panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+#record h3 {
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+#record input[type="date"] {
+  padding: 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+}
+
+#record #attendanceList {
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+#record #saveAttendance {
+  background: #2563eb;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#record #saveAttendance:hover {
+  background: #1d4ed8;
+}
 
 
 
