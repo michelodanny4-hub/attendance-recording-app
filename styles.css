@@ -560,7 +560,56 @@ tr:hover {
 #record #saveAttendance:hover {
   background: #1d4ed8;
 }
+/* REPORTS PAGE - PROFESSIONAL DESIGN */
 
+#reports .panel {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+}
+
+#reports h3 {
+  color: #1e3a8a;
+  font-weight: 700;
+}
+
+#reports input[type="date"] {
+  padding: 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+}
+
+#reports button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 16px;
+  cursor: pointer;
+}
+
+#reports button:hover {
+  background: #1d4ed8;
+}
+
+#reports table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+#reports th {
+  background: #eff6ff;
+  color: #1e3a8a;
+  padding: 12px;
+  text-align: left;
+}
+
+#reports td {
+  padding: 12px;
+  border-bottom: 1px solid #e2e8f0;
+}
 
 
 
