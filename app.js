@@ -153,14 +153,6 @@ $('cancelStudent').onclick = () => {
 };
 
 
-// Open and close student registration form
-$('addStudentBtn').onclick = () => {
-  $('studentFormWrap').hidden = false;
-};
-
-$('cancelStudent').onclick = () => {
-  $('studentFormWrap').hidden = true;
-};
  // Register a new student
 $('studentForm').onsubmit = async e => {
   e.preventDefault();
