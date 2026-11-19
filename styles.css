@@ -408,7 +408,7 @@ tr:hover {
   line-height: 1.8;
 }
 
-@media(max-width: 850px) {
+@media(max-width: 600px) {
   .dashboard-overview {
     grid-template-columns: 1fr;
   }
