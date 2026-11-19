@@ -225,7 +225,6 @@ async function loadPrograms() {
       <td>${counts[program.id] || 0}</td>
     </tr>
   `).join('');
-}
   // Display programme summary on Dashboard
   $('programmeSummary').innerHTML = (data || []).map(program => `
     <div style="padding:12px;margin:8px 0;border:1px solid #ddd;border-radius:8px;">
@@ -235,7 +234,7 @@ async function loadPrograms() {
       </span>
     </div>
   `).join('');
-
+}
 // Get attendance records for a selected date
 async function getDayRecords(date) {
   const { data, error } = await client
