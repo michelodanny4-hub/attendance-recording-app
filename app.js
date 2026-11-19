@@ -1,6 +1,6 @@
 // Fill these two values from Supabase: Project Settings > API
 const SUPABASE_URL = "https://jknunotwyultgevdnecj.supabase.co";
-const SUPABASE_ANON_KEY = "sb_publishable_kvxiC12zDPT5i160RKofToA_2eDyXf1U";
+const SUPABASE_ANON_KEY = "sb_publishable_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprbnVub3R3eXVsdGdldmRuZWNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTQ1MzUwODMsImV4cCI6MjExMDExMTA4M30.eXnhhLjn7o-T2TMn4zi912fLcNwUSbixtRcTKnXQ-oI";
 const configured = !SUPABASE_URL.includes("YOUR_") && !SUPABASE_ANON_KEY.includes("YOUR_");
 const client = configured ? window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY) : null;
 const $=id=>document.getElementById(id);
