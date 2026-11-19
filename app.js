@@ -485,69 +485,7 @@ $('exportReport').onclick = async () => {
   URL.revokeObjectURL(url);
 };
 
-// Student search and programme filtering
-function renderStudents() {
-  if (!$('studentSearch')) {
-    $('studentsRows').insertAdjacentHTML(
-      'beforebegin',
-      '<input id="studentSearch" type="text" placeholder="Search by student name, ID, semester or program..." style="width:100%;padding:12px;margin-bottom:12px;">'
-    );
 
-    $('studentSearch').addEventListener('input', renderStudents);
-  }
-
-  // Get search text and selected programme
-  const term = $('studentSearch').value.toLowerCase();
-  const selectedProgram = $('programFilter').value;
-
-  // Filter students
-  const filtered = students.filter(s => {
-    const matchesSearch = [
-      s.full_name,
-      s.student_code,
-      s.class_name,
-      s.program
-    ].some(value =>
-      String(value || '').toLowerCase().includes(term)
-    );
-
-    const matchesProgram =
-      !selectedProgram || String(s.program_id) === selectedProgram;
-
-    return matchesSearch && matchesProgram;
-  });
-
-  // Display students
-  $('studentsRows').innerHTML = filtered.map(s =>
-    `<tr>
-      <td>${esc(s.student_code)}</td>
-      <td>${esc(s.full_name)}</td>
-      <td>${esc(s.class_name || '—')}</td>
-      <td>${esc(s.program || '—')}</td>
-      <td>
-        <button class="danger" data-del="${s.id}">Delete</button>
-      </td>
-    </tr>`
-  ).join('');
-
-  // Delete student
-  document.querySelectorAll('[data-del]').forEach(b =>
-    b.onclick = async () => {
-      if (confirm('Delete this student and their attendance records?')) {
-        const {error} = await client.from('students')
-          .delete()
-          .eq('id', b.dataset.del);
-
-        if (error) alert(error.message);
-        else {
-          await loadStudents();
-          await loadDashboard();
-          await renderAttendance();
-        }
-      }
-    }
-  );
-}
 
 // Update list when programme changes
 $('programFilter').addEventListener('change', renderStudents);
