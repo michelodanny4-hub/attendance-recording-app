@@ -377,9 +377,34 @@ async function loadDashboard() {
     ? Math.round(present / records.length * 100) + '%'
     : '0%';
 
-  $('todaySummary').innerHTML = records.length
-    ? `<p><b>${records.length}</b> records · ${present} present/late · ${absent} absent · ${records.filter(r => r.status === 'Excused').length} excused</p>`
-    : 'No attendance records for today yet.';
+  
+const excused = records.filter(
+  r => r.status === 'Excused'
+).length;
+
+$('todaySummary').innerHTML = records.length
+  ? `
+    <div>
+      <strong style="
+        display:block;
+        font-size:25px;
+        color:#172554;
+        margin-bottom:8px;
+      ">
+        ${records.length} Records Today
+      </strong>
+      <p style="font-size:14px;color:#172554;">
+        <span style="color:#16a34a;">${present} present/late</span>
+        &nbsp; • &nbsp;
+        <span style="color:#dc2626;">${absent} absent</span>
+        &nbsp; • &nbsp;
+        <span>${excused} excused</span>
+      </p>
+    </div>
+  `
+  : '<strong>0 Records Today</strong><p>No attendance records yet.</p>';
+
+
 }
 
 
