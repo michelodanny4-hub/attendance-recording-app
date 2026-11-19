@@ -189,6 +189,16 @@ async function loadPrograms() {
       </option>
     `).join('');
 
+  // Fill the programme filter dropdown
+  $('programFilter').innerHTML =
+    '<option value="">All Programmes</option>' +
+    (data || []).map(program => `
+      <option value="${program.id}">
+        ${esc(program.program_name)}
+      </option>
+    `).join('');
+  
+
   // Count students in each programme
   const { data: studentData, error: studentError } = await client
     .from('students')
