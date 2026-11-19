@@ -413,5 +413,24 @@ tr:hover {
     grid-template-columns: 1fr;
   }
 }
+
+    /* FORCE DASHBOARD TWO-COLUMN LAYOUT */
+#dashboard .dashboard-overview {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  width: 100% !important;
+  gap: 20px !important;
+}
+
+#dashboard .dashboard-overview > article {
+  width: auto !important;
+  min-width: 0 !important;
+}
+
+@media (max-width: 600px) {
+  #dashboard .dashboard-overview {
+    grid-template-columns: 1fr !important;
+  }
+}
    
 }
