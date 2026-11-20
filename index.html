@@ -3,7 +3,8 @@
 <title>Attendance Record</title><link rel="stylesheet" href="styles.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head>
 <body><div id="login" class="login-wrap"><section class="login-card"><div class="logo">AR</div><h1>Attendance Record</h1><p>Sign in to manage attendance online.</p><form id="loginForm"><label>Email</label><input id="email" type="email" required placeholder="admin@example.com"><label>Password</label><input id="password" type="password" required placeholder="Password"><button type="submit">Sign in</button></form><p id="loginMsg" class="msg"></p></section></div>
-<div id="app" hidden><aside class="sidebar"><div class="brand"><span class="logo">AR</span><span>Attendance<br><small>RECORD SYSTEM</small></span></div><nav><button class="nav active" data-page="dashboard">▦ Dashboard</button> <button class="nav" data-page="students">♙ Students</button>
+<div id="app" hidden><aside class="sidebar"> <div class="brand">
+  <img src="cnu-logo.png" alt="CNU University Logo" class="logo-img">   <span>Attendance<br><small>RECORD SYSTEM</small></span></div><nav><button class="nav active" data-page="dashboard">▦ Dashboard</button> <button class="nav" data-page="students">♙ Students</button>
 <button class="nav" data-page="programs">▣ Programs</button><button class="nav" data-page="record">✓ Record Attendance</button>             <button class="nav" data-page="reports">▤ Reports</button>
 <button class="nav" data-page="history">◷ View History</button>
 <button class="nav" data-page="settings">⚙ Settings</button>  </nav><button id="logout" class="logout">↪ Sign out</button></aside>
