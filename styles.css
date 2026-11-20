@@ -628,4 +628,36 @@ tr:hover {
   padding: 3px;
   flex-shrink: 0;
 }
+/* CHILANGA NORTH UNIVERSITY HEADER */
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 135px;
+  padding: 22px 28px;
+  background: linear-gradient(120deg, #ffffff, #eaf3ff, #b9d9ff);
+  border-bottom: 4px solid #1764bd;
+  box-shadow: 0 4px 14px rgba(20, 60, 120, 0.12);
+}
 
+.main-header .eyebrow {
+  color: #174b91;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+
+.main-header h2 {
+  color: #102c55;
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.main-header .user {
+  color: #102c55;
+  font-weight: 700;
+  white-space: nowrap;
+}
