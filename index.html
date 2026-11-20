@@ -167,14 +167,47 @@
   </article>
 </section>
 
-  
+
 <section id="programs" class="page" hidden>
   <article class="panel">
+
     <div class="panel-head">
       <div>
         <h3>University Programmes</h3>
         <p class="muted">Manage all programmes offered by the university.</p>
       </div>
+
+      <button id="addProgramBtn" type="button">
+        + Add Programme
+      </button>
+    </div>
+
+    <div id="programFormWrap" hidden
+      style="padding:18px;margin-bottom:18px;border:1px solid #dbe3f0;border-radius:10px;">
+
+      <h3>Register New Programme</h3>
+
+      <form id="programForm">
+
+        <label for="programName">Programme Name</label>
+
+        <input
+          id="programName"
+          type="text"
+          placeholder="Enter programme name"
+          required
+          style="width:100%;padding:12px;margin:10px 0 15px;"
+        >
+
+        <button type="submit">Save Programme</button>
+
+        <button type="button" id="cancelProgram">
+          Cancel
+        </button>
+
+        <p id="programMsg" class="msg"></p>
+
+      </form>
     </div>
 
     <div class="table-wrap">
@@ -186,11 +219,14 @@
             <th>Registered Students</th>
           </tr>
         </thead>
+
         <tbody id="programsRows"></tbody>
       </table>
     </div>
+
   </article>
 </section>
+
 
 <section id="history" class="page" hidden>
   <article class="panel">
