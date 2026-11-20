@@ -383,36 +383,124 @@ const excused = records.filter(
   r => r.status === 'Excused'
 ).length;
 
-$('todaySummary').innerHTML = records.length
-  ? `
-    <div>
-      <strong style="display:block;font-size:25px;color:#172554;margin-bottom:8px;">
-        ${records.length} Records Today
-      </strong>
+const attendanceTotal = present + absent;
+const attendanceRate = attendanceTotal > 0
+  ? Math.round((present / attendanceTotal) * 100)
+  : 0;
 
-      <p style="font-size:14px;color:#172554;">
-        <span style="color:#16a34a;">${present} Present/Late</span>
-        &nbsp; • &nbsp;
-        <span style="color:#dc2626;">${absent} Absent</span>
-        &nbsp; • &nbsp;
-        <span style="color:#64748b;">${excused} Excused</span>
-      </p>
+$('todaySummary').innerHTML = `
+  <div style="
+    width:100%;
+    box-sizing:border-box;
+    background:#fffef1;
+    border:1px solid #e5e0cf;
+    border-radius:9px;
+    overflow:hidden;
+  ">
 
-      <div style="margin-top:15px;">
-        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-          <strong>Attendance rate</strong>
-          <strong style="color:#2563eb;">
-            ${Math.round(present / records.length * 100)}%
-          </strong>
-        </div>
+    <div style="
+      background:#17245f;
+      color:white;
+      padding:8px 14px;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:13px;
+      font-weight:700;
+    ">
+      <span>▦</span>
+      <span>Today's Attendance Overview</span>
+    </div>
 
-        <div style="height:10px;background:#e2e8f0;border-radius:10px;overflow:hidden;">
-          <div style="width:${present / records.length * 100}%;height:100%;background:#2563eb;border-radius:10px;"></div>
+    <div style="
+      display:flex;
+      align-items:center;
+      justify-content:space-around;
+      gap:18px;
+      padding:12px 18px;
+      min-height:120px;
+      box-sizing:border-box;
+      flex-wrap:wrap;
+    ">
+
+      <div style="
+        width:96px;
+        height:96px;
+        flex:0 0 96px;
+        border-radius:50%;
+        background:conic-gradient(
+          #28ad70 0% ${attendanceRate}%,
+          #d8d2ca ${attendanceRate}% 100%
+        );
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      ">
+        <div style="
+          width:68px;
+          height:68px;
+          border-radius:50%;
+          background:#fffef1;
+          display:flex;
+          flex-direction:column;
+          align-items:center;
+          justify-content:center;
+        ">
+          <strong style="
+            font-size:18px;
+            line-height:1.2;
+            color:#202033;
+          ">${attendanceRate}%</strong>
+
+          <span style="font-size:10px;color:#202033;">
+            Present
+          </span>
         </div>
       </div>
+
+      <div style="
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+        flex:1;
+        min-width:125px;
+        max-width:190px;
+      ">
+
+        <div style="
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          gap:12px;
+          font-size:12px;
+          color:#292929;
+        ">
+          <span style="display:flex;align-items:center;gap:7px;">
+            <span style="width:11px;height:11px;border-radius:50%;background:#28ad70;"></span>
+            Present
+          </span>
+          <strong>${present}</strong>
+        </div>
+
+        <div style="
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          gap:12px;
+          font-size:12px;
+          color:#292929;
+        ">
+          <span style="display:flex;align-items:center;gap:7px;">
+            <span style="width:11px;height:11px;border-radius:50%;background:#d8d2ca;"></span>
+            Absent
+          </span>
+          <strong>${absent}</strong>
+        </div>
+
+      </div>
     </div>
-  `
-  : '<strong>0 Records Today</strong><p>No attendance records yet.</p>';
+  </div>
+`;
 
 
 }
