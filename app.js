@@ -316,13 +316,109 @@ async function loadPrograms() {
     }
   });
 
-  $('programsRows').innerHTML = (data || []).map((program, index) => `
-    <tr>
-      <td>${index + 1}</td>
-      <td>${esc(program.program_name)}</td>
-      <td>${counts[program.id] || 0}</td>
-    </tr>
-  `).join('');
+ 
+$('programsRows').innerHTML = (data || []).map((program, index) => `
+  <tr>
+    <td>${index + 1}</td>
+    <td>${esc(program.program_name)}</td>
+    <td>${counts[program.id] || 0}</td>
+    <td>
+      <button type="button" data-edit-program="${program.id}">
+        Edit
+      </button>
+      <button type="button" class="danger" data-delete-program="${program.id}">
+        Delete
+      </button>
+    </td>
+  </tr>
+`).join('');
+
+  
+  // Edit programme
+  document.querySelectorAll('[data-edit-program]').forEach(button => {
+    button.onclick = async () => {
+      const program = (data || []).find(
+        p => String(p.id) === button.dataset.editProgram
+      );
+
+      if (!program) return;
+
+      const newName = prompt(
+        'Enter the new programme name:',
+        program.program_name
+      );
+
+      if (newName === null) return;
+
+      if (!newName.trim()) {
+        alert('Programme name cannot be empty.');
+        return;
+      }
+
+      const { error } = await client
+        .from('programs')
+        .update({ program_name: newName.trim() })
+        .eq('id', program.id);
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      // Update the programme name stored in student records
+      const { error: studentError } = await client
+        .from('students')
+        .update({ program: newName.trim() })
+        .eq('program_id', program.id);
+
+      if (studentError) {
+        alert('Programme updated, but some student records were not updated: ' + studentError.message);
+      } else {
+        alert('Programme updated successfully!');
+      }
+
+      await loadPrograms();
+      await loadStudents();
+      await loadDashboard();
+    };
+  });
+
+  // Delete programme
+  document.querySelectorAll('[data-delete-program]').forEach(button => {
+    button.onclick = async () => {
+      const program = (data || []).find(
+        p => String(p.id) === button.dataset.deleteProgram
+      );
+
+      if (!program) return;
+
+      if ((counts[program.id] || 0) > 0) {
+        alert('This programme has registered students. You cannot delete it until those students are moved or removed.');
+        return;
+      }
+
+      if (!confirm('Are you sure you want to delete ' + program.program_name + '?')) {
+        return;
+      }
+
+      const { error } = await client
+        .from('programs')
+        .delete()
+        .eq('id', program.id);
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      alert('Programme deleted successfully!');
+
+      await loadPrograms();
+      await loadDashboard();
+    };
+  });
+
+
 
 
 // Display Programme Summary as a professional table
