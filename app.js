@@ -225,6 +225,47 @@ $('studentForm').onsubmit = async e => {
 };
 
 
+// Programme registration controls
+$('addProgramBtn').onclick = () => {
+  $('programFormWrap').hidden = false;
+  $('programName').focus();
+};
+
+$('cancelProgram').onclick = () => {
+  $('programFormWrap').hidden = true;
+  $('programForm').reset();
+  $('programMsg').textContent = '';
+};
+
+// Save a new university programme
+$('programForm').onsubmit = async e => {
+  e.preventDefault();
+
+  const programName = $('programName').value.trim();
+
+  if (!programName) {
+    $('programMsg').textContent = 'Please enter a programme name.';
+    return;
+  }
+
+  const { error } = await client
+    .from('programs')
+    .insert({ program_name: programName });
+
+  if (error) {
+    $('programMsg').textContent = error.message;
+    return;
+  }
+
+  alert('Programme added successfully!');
+
+  $('programForm').reset();
+  $('programFormWrap').hidden = true;
+
+  await loadPrograms();
+  await loadDashboard();
+};
+
 // Load university programmes from Supabase
 async function loadPrograms() {
   const { data, error } = await client
