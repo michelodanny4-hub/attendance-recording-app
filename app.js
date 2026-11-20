@@ -25,7 +25,6 @@ async function startApp() {
 
   $('login').hidden = true;
   $('app').hidden = false;
-  $('userEmail').textContent = session.user.email;
 
   await loadStudents();
   await loadPrograms();
