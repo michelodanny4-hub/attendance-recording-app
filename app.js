@@ -317,9 +317,9 @@ $('programmeSummary').innerHTML = `
 
           return `
             <tr>
-              <td style="padding:12px;border:1px solid #dbe3f0;">
-                ${esc(program.program_name)}
-              </td>
+           <td style="padding:12px;border:1px solid #dbe3f0;">
+  ${esc(program.program_name)}
+</td> 
               <td style="padding:12px;text-align:center;border:1px solid #dbe3f0;">
                 ${studentCount}
               </td>
@@ -327,7 +327,6 @@ $('programmeSummary').innerHTML = `
                 ${percentage}%
               </td>
             </tr>
-          `;
         }).join('')}
       </tbody>
     </table>
