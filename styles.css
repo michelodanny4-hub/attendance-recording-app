@@ -730,3 +730,18 @@ tr:hover {
   font-weight: 700;
   white-space: nowrap;
 }
+
+/* FINAL UNIVERSITY COLOUR CORRECTIONS */
+
+.sidebar {
+  background: #082b63 !important;
+}
+
+button.danger {
+  background: #dc2626 !important;
+  color: white !important;
+}
+
+
+
+
