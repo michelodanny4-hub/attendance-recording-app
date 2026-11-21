@@ -1055,3 +1055,58 @@ $('printReport').addEventListener('click', function() {
   window.print();
 });
 if(configured)startApp();
+
+// USER MANAGEMENT
+async function loadUsers() {
+  const { data, error } = await client
+    .from('user_roles')
+    .select('full_name, email, role')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    notice('userMsg', error.message);
+    return;
+  }
+
+  $('usersRows').innerHTML = (data || []).map(user => `
+    <tr>
+      <td>${esc(user.full_name)}</td>
+      <td>${esc(user.email || '')}</td>
+      <td>${esc(user.role)}</td>
+    </tr>
+  `).join('');
+}
+
+$('userForm').addEventListener('submit', async e => {
+  e.preventDefault();
+
+  const button = $('userForm').querySelector('button[type="submit"]');
+  button.disabled = true;
+  notice('userMsg', 'Sending invitation...');
+
+  try {
+    const { data, error } = await client.functions.invoke('manage-users', {
+      body: {
+        full_name: $('userFullName').value.trim(),
+        email: $('userEmail').value.trim(),
+        role: $('userRole').value
+      }
+    });
+
+    if (error) throw error;
+    if (data?.error) throw new Error(data.error);
+
+    notice('userMsg', data.message || 'User invited successfully.');
+    $('userForm').reset();
+    await loadUsers();
+
+  } catch (error) {
+    notice('userMsg', error.message || 'Could not register user.');
+  } finally {
+    button.disabled = false;
+  }
+});
+
+// Load users when the User Management page is opened
+document.querySelector('[data-page="users"]')?.addEventListener('click', loadUsers);
+
