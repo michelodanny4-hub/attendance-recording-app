@@ -100,27 +100,60 @@
       <button id="addStudentBtn">+ Add student</button>
     </div>
 
-    <div id="studentFormWrap" hidden>
-      <form id="studentForm" class="student-form">
+   
+<div id="studentFormWrap" hidden
+  style="margin:18px 0;padding:22px;background:white;border:1px solid #dbe3f0;border-radius:12px;">
 
-        <input id="studentName" required
-          placeholder="Student full name">
+  <div style="margin-bottom:20px;">
+    <h3 style="margin:0 0 6px;color:#172554;">Register New Student</h3>
+    <p class="muted" style="margin:0;">
+      Enter the student's details below.
+    </p>
+  </div>
 
-        <input id="studentCode" required
-          placeholder="Student ID / number">
+  <form id="studentForm" class="student-form"
+    style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;">
 
-        <input id="studentClass"
-          placeholder="Semester (e.g. Semester 1)">
-<select id="studentProgram" required>
-  <option value="">Select Programme</option>
-</select>
+    <div>
+      <label for="studentName">Student Full Name</label>
+      <input id="studentName" type="text" required
+        placeholder="Enter student full name"
+        style="width:100%;padding:12px;margin-top:7px;">
+    </div>
 
-        <button type="submit">Save student</button>
+    <div>
+      <label for="studentCode">Student ID / Number</label>
+      <input id="studentCode" type="text" required
+        placeholder="Enter student ID"
+        style="width:100%;padding:12px;margin-top:7px;">
+    </div>
 
-        <button type="button" id="cancelStudent"
-          class="secondary">Cancel</button>
+    <div>
+      <label for="studentClass">Semester</label>
+      <input id="studentClass" type="text"
+        placeholder="e.g. Semester 1"
+        style="width:100%;padding:12px;margin-top:7px;">
+    </div>
 
-      </form>
+    <div>
+      <label for="studentProgram">University Programme</label>
+      <select id="studentProgram" required
+        style="width:100%;padding:12px;margin-top:7px;">
+        <option value="">Select Programme</option>
+      </select>
+    </div>
+
+    <div style="grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;">
+      <button type="submit">Save Student</button>
+
+      <button type="button" id="cancelStudent" class="secondary">
+        Cancel
+      </button>
+    </div>
+
+  </form>
+</div>
+
     </div>
 
     <div style="margin:15px 0;">
