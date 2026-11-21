@@ -764,19 +764,18 @@ button.danger {
   background: #dcfce7 !important;
 }
 
-
-/* PROGRAMMES PAGE - PROFESSIONAL TEAL DESIGN */
+/* PROGRAMMES PAGE - CHAMPAGNE GOLD DESIGN */
 
 #programs > .panel {
-  background: linear-gradient(135deg, #e9f8f5, #d9f1eb) !important;
-  border: 1px solid #bce5dc !important;
-  border-top: 5px solid #168477 !important;
+  background: linear-gradient(135deg, #fff8e8, #f8edcf) !important;
+  border: 1px solid #ead9b0 !important;
+  border-top: 5px solid #d6a442 !important;
   border-radius: 16px;
-  box-shadow: 0 5px 16px rgba(22, 132, 119, 0.10);
+  box-shadow: 0 5px 16px rgba(180, 135, 45, 0.10);
 }
 
 #programs h3 {
-  color: #164e48 !important;
+  color: #18345b !important;
 }
 
 #programs table {
@@ -785,9 +784,15 @@ button.danger {
   overflow: hidden;
 }
 
-#programs tbody tr:hover {
-  background: #e9f8f5 !important;
+#programs th {
+  background: #f8edcf;
+  color: #18345b;
 }
+
+#programs tbody tr:hover {
+  background: #fff4da !important;
+}
+
 
 
 
