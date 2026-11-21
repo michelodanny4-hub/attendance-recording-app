@@ -4,78 +4,11 @@
 
 /* Modern Attendance Dashboard */
 
-/* CHILANGA NORTH UNIVERSITY - BLUE AND WHITE THEME */
-
 body {
-  background: linear-gradient(135deg, #eaf4ff, #dcecff, #f4f9ff);
-  color: #102c55;
+  background: #f1f5f9;
+  color: #1e293b;
   font-family: "Segoe UI", Arial, sans-serif;
 }
-
-main {
-  background: transparent;
-  min-height: 100vh;
-}
-
-/* Dark blue sidebar */
-.sidebar {
-  background: #082b63;
-  color: white;
-}
-
-.brand small {
-  color: #c5dcff;
-}
-
-.nav {
-  color: #dceaff;
-}
-
-.nav.active,
-.nav:hover {
-  background: #1764bd;
-  color: white;
-}
-
-/* White dashboard panels */
-.stats article,
-.panel {
-  background: white;
-  border: 1px solid #d7e6f7;
-  box-shadow: 0 5px 16px rgba(15, 55, 100, 0.08);
-}
-
-.stats strong,
-.panel h3,
-header h2 {
-  color: #102c55;
-}
-
-/* Light blue table headings */
-th {
-  background: #eaf3ff;
-  color: #173b70;
-}
-
-/* Blue action buttons */
-button {
-  background: #1764bd;
-  color: white;
-}
-
-/* Keep delete buttons red */
-.danger {
-  background: #fee2e2;
-  color: #b91c1c;
-}
-
-/* Keep secondary buttons grey */
-.secondary {
-  background: #e9ebf4;
-  color: #343b4d;
-}
-
-
 .app {
   max-width: 1400px;
   margin: auto;
