@@ -338,4 +338,60 @@
     <p id="appSettingsMsg" class="msg"></p>
   </article>
 </section>
+
+</section>
+
+<!-- USER MANAGEMENT PAGE -->
+<section id="users" class="page" hidden>
+  <article class="panel">
+    <h2>👥 User Management</h2>
+    <p class="muted">Manage university administrators, lecturers and staff.</p>
+
+    <hr>
+
+    <h3>Register New User</h3>
+
+    <form id="userForm">
+      <label>Full Name</label>
+      <input id="userFullName" type="text" placeholder="Enter full name" required>
+
+      <label>Email Address</label>
+      <input id="userEmail" type="email" placeholder="Enter email address" required>
+
+      <label>User Role</label>
+      <select id="userRole" required>
+        <option value="">Select user role</option>
+        <option value="administrator">Administrator</option>
+        <option value="lecturer">Lecturer</option>
+        <option value="staff">Staff</option>
+      </select>
+
+      <p class="muted">User accounts will be created through the secure administrator process.</p>
+
+      <button type="submit">Register User</button>
+    </form>
+
+    <p id="userMsg" class="msg"></p>
+
+    <hr>
+
+    <h3>Registered Users</h3>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody id="usersRows"></tbody>
+      </table>
+    </div>
+  </article>
+</section>
+
+</main></div><script src="app.js"></script></body></html>
+  
 </main></div><script src="app.js"></script></body></html>
