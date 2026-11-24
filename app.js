@@ -31,6 +31,7 @@ async function startApp() {
   await loadDashboard();
   await renderAttendance();
   await renderWeeklyAttendance();
+  await renderMonthlyAttendance();
 }
 
 // Main menu navigation
@@ -782,19 +783,6 @@ async function renderWeeklyAttendance() {
       rate
     });
   }
-
- container.innerHTML = `
-  <div style="display:flex;align-items:end;gap:14px;height:210px;padding:15px 5px 0;">
-    ${days.map(day => `
-      <div style="flex:1;text-align:center;min-width:0;">
-        <div style="font-size:13px;font-weight:700;color:#172554;margin-bottom:8px;">
-          ${day.rate}%
-        </div>
-
-        <div style="height:135px;display:flex;align-items:end;background:#f1f5f9;border-radius:9px 9px 0 0;overflow:hidden;">
-          <div style="
-            width:100%;
-            height:${day.rate}%;
             min-height:${day.rate ? 4 : 0}px;
             background:linear-gradient(180deg,#60a5fa,#2563eb);
             border-radius:9px 9px 0 0;
@@ -813,7 +801,73 @@ async function renderWeeklyAttendance() {
   </p>
 `;
 }
+// MONTHLY ATTENDANCE CHART
+async function renderMonthlyAttendance() {
+  const container = $('monthlyChartContent');
+  container.innerHTML = 'Loading monthly attendance...';
 
+  const months = [];
+
+  for (let i = 0; i < 12; i++) {
+    const start = new Date();
+    start.setDate(1);
+    start.setMonth(i);
+
+    const year = new Date().getFullYear();
+
+    const monthStart =
+      year + '-' + String(i + 1).padStart(2, '0') + '-01';
+
+    const nextMonth = new Date(year, i + 1, 1);
+    const monthEnd =
+      nextMonth.getFullYear() + '-' +
+      String(nextMonth.getMonth() + 1).padStart(2, '0') + '-' +
+      String(nextMonth.getDate()).padStart(2, '0');
+
+    const { data, error } = await client
+      .from('attendance')
+      .select('status, attendance_date')
+.gte('attendance_date', monthStart)
+.lt('attendance_date', monthEnd);
+
+    if (error) {
+      container.innerHTML = 'Could not load monthly attendance.';
+      return;
+    }
+
+    const records = data || [];
+
+    const present = records.filter(
+      r => r.status === 'Present' || r.status === 'Late'
+    ).length;
+
+    months.push({
+      label: new Date(year, i, 1).toLocaleDateString('en', {
+        month: 'short'
+      }),
+      present
+    });
+  }
+
+  const max = Math.max(1, ...months.map(m => m.present));
+
+  container.innerHTML = `
+    <div style="display:flex;align-items:flex-end;gap:12px;height:220px;overflow-x:auto;padding:15px 5px;">
+      ${months.map(month => `
+        <div style="flex:1;min-width:28px;text-align:center;">
+          <div style="
+            height:${Math.max(4, month.present / max * 165)}px;
+            background:linear-gradient(180deg,#60a5fa,#2563eb);
+            border-radius:7px 7px 0 0;
+          "></div>
+          <small>${month.label}</small>
+          <div><strong>${month.present}</strong></div>
+        </div>
+      `).join('')}
+    </div>
+    <p class="muted">Number of students marked Present or Late each month.</p>
+  `;
+}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 // Export attendance report to CSV
 $('loadReport').insertAdjacentHTML(
