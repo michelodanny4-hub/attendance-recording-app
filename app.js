@@ -748,8 +748,6 @@ async function renderAttendance() {
     await renderWeeklyAttendance();
   };
 }
-
-
 // Weekly attendance chart
 async function renderWeeklyAttendance() {
   const container = $('weeklyChartContent');
@@ -783,24 +781,10 @@ async function renderWeeklyAttendance() {
       rate
     });
   }
-            min-height:${day.rate ? 4 : 0}px;
-            background:linear-gradient(180deg,#60a5fa,#2563eb);
-            border-radius:9px 9px 0 0;
-          "></div>
-        </div>
 
-        <small style="display:block;margin-top:9px;color:#475569;font-weight:600;">
-          ${day.label}
-        </small>
-      </div>
-    `).join('')}
-  </div>
+  container.innerHTML = `
+    DIL0
 
-  <p class="muted" style="margin-top:18px;">
-    Daily attendance rate for the last 7 days.
-  </p>
-`;
-}
 // MONTHLY ATTENDANCE CHART
 async function renderMonthlyAttendance() {
   const container = $('monthlyChartContent');
