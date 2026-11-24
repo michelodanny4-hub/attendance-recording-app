@@ -804,24 +804,21 @@ async function renderWeeklyAttendance() {
     </p>
   `;
 }
+
 // MONTHLY ATTENDANCE CHART
 async function renderMonthlyAttendance() {
   const container = $('monthlyChartContent');
   container.innerHTML = 'Loading monthly attendance...';
 
   const months = [];
+  const year = new Date().getFullYear();
 
   for (let i = 0; i < 12; i++) {
-    const start = new Date();
-    start.setDate(1);
-    start.setMonth(i);
-
-    const year = new Date().getFullYear();
-
     const monthStart =
       year + '-' + String(i + 1).padStart(2, '0') + '-01';
 
     const nextMonth = new Date(year, i + 1, 1);
+
     const monthEnd =
       nextMonth.getFullYear() + '-' +
       String(nextMonth.getMonth() + 1).padStart(2, '0') + '-' +
@@ -830,8 +827,8 @@ async function renderMonthlyAttendance() {
     const { data, error } = await client
       .from('attendance')
       .select('status, attendance_date')
-.gte('attendance_date', monthStart)
-.lt('attendance_date', monthEnd);
+      .gte('attendance_date', monthStart)
+      .lt('attendance_date', monthEnd);
 
     if (error) {
       container.innerHTML = 'Could not load monthly attendance.';
@@ -868,9 +865,11 @@ async function renderMonthlyAttendance() {
         </div>
       `).join('')}
     </div>
-    <p class="muted">Number of students marked Present or Late each month.</p>
+    <p class="muted">Total Present or Late attendance records each month.</p>
   `;
 }
+
+
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 // Export attendance report to CSV
 $('loadReport').insertAdjacentHTML(
