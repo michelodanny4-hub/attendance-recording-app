@@ -751,7 +751,6 @@ async function renderAttendance() {
 // Weekly attendance chart
 async function renderWeeklyAttendance() {
   const container = $('weeklyChartContent');
-
   container.innerHTML = 'Loading weekly attendance...';
 
   const days = [];
@@ -783,8 +782,28 @@ async function renderWeeklyAttendance() {
   }
 
   container.innerHTML = `
-    DIL0
-
+    <div style="display:flex;align-items:flex-end;gap:15px;height:210px;padding:15px 5px;overflow-x:auto;">
+      ${days.map(day => `
+        <div style="flex:1;min-width:35px;text-align:center;">
+          <div style="height:160px;display:flex;align-items:flex-end;">
+            <div title="${day.rate}% attendance" style="
+              width:100%;
+              height:${day.rate * 1.6}px;
+              min-height:${day.rate ? 4 : 0}px;
+              background:linear-gradient(180deg,#60a5fa,#2563eb);
+              border-radius:9px 9px 0 0;
+            "></div>
+          </div>
+          <small>${day.label}</small>
+          <strong style="display:block;">${day.rate}%</strong>
+        </div>
+      `).join('')}
+    </div>
+    <p class="muted" style="margin-top:18px;">
+      Daily attendance rate for the last 7 days.
+    </p>
+  `;
+}
 // MONTHLY ATTENDANCE CHART
 async function renderMonthlyAttendance() {
   const container = $('monthlyChartContent');
