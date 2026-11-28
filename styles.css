@@ -794,6 +794,125 @@ button.danger {
 }
 
 
+/* CNUC - PROFESSIONAL MOBILE LAYOUT */
+
+@media (max-width: 600px) {
+
+  /* Narrow mobile sidebar */
+  .sidebar {
+    width: 60px !important;
+    padding: 12px 5px !important;
+  }
+
+  .brand {
+    margin: 0 0 22px !important;
+    justify-content: center;
+  }
+
+  .logo-img {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .nav {
+    width: 100%;
+    margin: 5px 0 !important;
+    padding: 13px 3px !important;
+    text-align: center !important;
+  }
+
+  /* Give the main content more room */
+  main {
+    margin-left: 60px !important;
+    padding: 12px !important;
+    width: auto;
+  }
+
+  /* Compact university heading */
+  .main-header {
+    min-height: auto !important;
+    padding: 16px !important;
+    gap: 10px !important;
+    align-items: flex-start !important;
+  }
+
+  .main-header .eyebrow {
+    font-size: 11px !important;
+    letter-spacing: 1px !important;
+    line-height: 1.4;
+  }
+
+  .main-header h2 {
+    font-size: 24px !important;
+    line-height: 1.2;
+  }
+
+  .main-header .user {
+    font-size: 12px !important;
+  }
+
+  /* Smaller dashboard cards */
+  #dashboard .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  #dashboard .stats article {
+    padding: 14px !important;
+    min-width: 0;
+  }
+
+  #dashboard .stats span {
+    font-size: 12px !important;
+  }
+
+  #dashboard .stats strong {
+    font-size: 27px !important;
+    margin-top: 10px !important;
+  }
+
+  #dashboard .stats p {
+    font-size: 11px !important;
+  }
+
+  #dashboard > .panel {
+    padding: 14px !important;
+  }
+
+  .dashboard-overview {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  /* Prevent forms from becoming too wide */
+  .student-form {
+    grid-template-columns: 1fr !important;
+  }
+
+  input,
+  select,
+  button {
+    max-width: 100%;
+  }
+
+  /* Make tables scroll horizontally */
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Very narrow phones */
+@media (max-width: 380px) {
+  #dashboard .stats {
+    grid-template-columns: 1fr !important;
+  }
+
+  .main-header h2 {
+    font-size: 21px !important;
+  }
+}
+
 
 
 
