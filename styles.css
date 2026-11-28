@@ -925,5 +925,19 @@ button.danger {
     padding: 12px !important;
   }
 }
+/* FORCE MOBILE DASHBOARD CARDS INTO TWO COLUMNS */
+@media screen and (max-width: 600px) {
+  #dashboard > .stats {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
 
+  #dashboard > .stats > article {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 12px !important;
+  }
+}
 
