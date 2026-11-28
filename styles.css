@@ -940,4 +940,34 @@ button.danger {
     padding: 12px !important;
   }
 }
+/* MOBILE SIDEBAR - SHOW MENU NAMES */
+@media (max-width: 600px) {
+  .sidebar {
+    width: 150px !important;
+    padding: 15px 8px !important;
+  }
 
+  .brand span:not(.logo) {
+    display: inline !important;
+  }
+
+  .nav {
+    font-size: 12px !important;
+    text-align: left !important;
+    padding: 12px 8px !important;
+    white-space: normal;
+  }
+
+  .nav:first-letter {
+    font-size: inherit !important;
+  }
+
+  .logout {
+    font-size: 12px !important;
+    text-align: left !important;
+  }
+
+  main {
+    margin-left: 150px !important;
+  }
+}
